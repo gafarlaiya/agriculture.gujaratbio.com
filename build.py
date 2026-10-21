@@ -83,7 +83,8 @@ def gallery(items):
 def pimg(p, w=None):
     f = os.path.join(ROOT, "assets", "img", "products", p["slug"] + ".webp")
     if os.path.exists(f):
-        return f'<img src="/assets/img/products/{p["slug"]}.webp" alt="{esc(p["name"])} bottle" loading="lazy" decoding="async" width="200" height="300">'
+        src = f"/assets/img/products/{'thumb/' if w == 'thumb' else ''}{p['slug']}.webp"
+        return f'<img src="{src}" alt="{esc(p["name"])} bottle" loading="lazy" decoding="async" width="200" height="300">'
     MEDIA.append((p["slug"] + ".webp", "img", f"Product photo of {p['name']} pack on white background (save in assets/img/products/)", _CUR["page"]))
     return f'<span class="noimg">{esc(p["slug"])}.webp</span>'
 
@@ -108,7 +109,7 @@ def header(path):
         items.append(f'<div class="ni"><a href="{h}"{cur}>{t}</a>{s}</div>')
     trial = '<span class="t">Trial version of the new website.</span>' if TRIAL else "<span></span>"
     return f'''<a class="skip" href="#main">Skip to content</a><div class="strip"><div class="wrap">{trial}<span><a href="tel:{TEL}">{PHONE}</a> &middot; <a href="{OLD_SITE}" rel="nofollow">Visit our old website</a></span></div></div>
-<header class="top"><div class="wrap"><a class="brand" href="/"><img src="/assets/img/brand/gbo-logo.webp" alt="Gujarat Bio Organics logo" width="46" height="46"><span class="bt"><b>Gujarat Bio Organics</b><span>Working with farmers since 2006</span></span></a>
+<header class="top"><div class="wrap"><a class="brand" href="/"><img src="/assets/img/brand/gbo-logo-96.webp" alt="Gujarat Bio Organics logo" width="46" height="46" fetchpriority="high"><span class="bt"><b>Gujarat Bio Organics</b><span>Working with farmers since 2006</span></span></a>
 <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button><nav class="nav" id="nav" aria-label="Main">{"".join(items)}<a class="enq" href="/enquiry" data-ev="begin_enquiry">Send enquiry</a></nav></div></header>'''
 
 def footer():
@@ -116,7 +117,7 @@ def footer():
     return f'''<div class="biz"><div class="wrap"><h2>Bulk buyer, manufacturer or brand?</h2><p>Need bulk supply, OEM or private label? Our business site has grades, specifications and export terms.</p>
 <div class="btns"><a class="btn" href="/bulk-buyers">Bulk buyers</a><a class="btn" href="/dealers">Become a dealer</a><a class="btn" href="{B2B}/private-label-oem?utm_source=agriculture.gujaratbio.com&amp;utm_medium=referral&amp;utm_campaign=farmer_site">OEM and private label</a></div></div></div>
 <footer class="foot"><div class="wrap"><div class="cols">
-<div><img src="/assets/img/brand/gbo-logo.webp" alt="" width="70" height="70" style="background:#fff;border-radius:12px;padding:4px"><h2>{NAME}</h2><p>Biostimulants, biofertilizers and organic fertilizers, made in Bhavnagar, Gujarat. Working with farmers since 2006.</p>
+<div><img src="/assets/img/brand/gbo-logo-96.webp" alt="" width="70" height="70" loading="lazy" style="background:#fff;border-radius:12px;padding:4px"><h2>{NAME}</h2><p>Biostimulants, biofertilizers and organic fertilizers, made in Bhavnagar, Gujarat. Working with farmers since 2006.</p>
 <p>Factory: {FACTORY}<br>Office: {REGOFF}<br>CIN {CIN}</p><p><a href="tel:{TEL}">{PHONE}</a> &middot; <a href="mailto:{MAIL}">{MAIL}</a></p>
 <p><a href="{SOCIAL[0]}" rel="noopener">Facebook</a> &middot; <a href="{SOCIAL[1]}" rel="noopener">YouTube</a></p></div>
 <div><h2>Crops</h2><ul>{crops}<li><a href="/crops">All crops</a></li></ul></div>
@@ -212,7 +213,7 @@ def faq_ld(qs): return {"@context": "https://schema.org", "@type": "FAQPage", "m
 def card(href, title, text, meta="", more="Read the full guide"):
     m = f'<div class="meta">{esc(meta)}</div>' if meta else ""
     return f'<article class="card">{m}<h3><a href="{href}">{esc(title)}</a></h3><p>{esc(text)}</p><a class="more" href="{href}">{esc(more)}</a></article>'
-def pcard(p): return f'<a class="pcard" href="/products/{p["slug"]}">{pimg(p)}<span><h3>{esc(p["name"])}</h3><p>{esc(p["line"])}</p><p class="note" style="margin-top:6px">Price on enquiry &middot; Where to buy</p></span></a>'
+def pcard(p): return f'<a class="pcard" href="/products/{p["slug"]}">{pimg(p, "thumb")}<span><h3>{esc(p["name"])}</h3><p>{esc(p["line"])}</p><p class="note" style="margin-top:6px">Price on enquiry &middot; Where to buy</p></span></a>'
 def enquiry_box(crop="", product="", title="Send us your enquiry"):
     q = "?" + "&".join(f"{k}={quote(v)}" for k, v in (("crop", crop), ("product", product)) if v) if (crop or product) else ""
     what = product or (f"my {crop.lower()} crop" if crop else "my crop")
@@ -226,7 +227,7 @@ def picker():
     tiles = []
     for c in CRP:
         p = PBY[c["product"]]
-        tiles.append(f'<a href="/crops/{c["slug"]}"><span class="tx"><b>{c["name"]}</b><span>{esc(c["hook"])}</span></span>{pimg(p)}</a>')
+        tiles.append(f'<a href="/crops/{c["slug"]}"><span class="tx"><b>{c["name"]}</b><span>{esc(c["hook"])}</span></span>{pimg(p, "thumb")}</a>')
     return '<div class="picker">' + "".join(tiles) + "</div>"
 
 # ---------------------------------------------------------------- home
