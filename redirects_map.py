@@ -39,6 +39,7 @@ OLD = {
  "/blog-organic-farming-and-yields": "/knowledge/sustainability", "/bog-n-p-k": "/knowledge/soil-fertility", "/blog-post33": "/knowledge/soil-fertility", "/blog-post31": "/knowledge/soil-fertility",
  "/blog-post37": "/crops/sugarcane", "/mlp": "/", "/page": "/", "/page12": "/", "/111": "/", "/landing1": "/", "/landing2": "/", "/landing3": "/", "/deletion": "/privacy-policy", "/classic-cap-hpeszv": "/products",
 }
+for _a in ARTICLES: OLD[_a["old"]] = "/articles/" + _a["slug"]   # moved articles keep their own page
 _valid = {p for p, _ in PAGES}
 _bad = {k: v for k, v in OLD.items() if v.split("#")[0] not in _valid}
 assert not _bad, _bad

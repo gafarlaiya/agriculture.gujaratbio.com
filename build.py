@@ -59,7 +59,7 @@ NAV = [("/", "Home", None),
        ("/products", "Products", [(f"/products#{g}", t) for g, t, _ in GROUPS]),
        ("/farmer-stories", "Farmer Stories", None),
        ("/knowledge", "Knowledge", [("/crop-problems", "Crop problems"), ("/knowledge/soil-health", "Soil health"), ("/knowledge/soil-fertility", "Soil fertility"),
-                                    ("/knowledge/sustainability", "Sustainability and the 5 Rs"), ("/guides", "Farming guides")]),
+                                    ("/knowledge/sustainability", "Sustainability and the 5 Rs"), ("/guides", "Farming guides"), ("/articles", "Articles")]),
        ("/about", "About", [("/about", "About us"), ("/our-story", "Our story: since 2006"), ("/our-impact", "Our impact"), ("/quality", "Quality and approvals"), ("/factory-and-rd", "Factory and R&D")]),
        ("/dealers", "Dealers & Bulk", [("/dealers", "Become a dealer"), ("/bulk-buyers", "Bulk buyers"), ("/oem-private-label", "Need OEM or private label?"), ("/where-to-buy", "Where to buy")])]
 
@@ -116,7 +116,7 @@ ORG = {"@context": "https://schema.org", "@type": "Organization", "@id": SITE + 
        "brand": {"@type": "Brand", "name": "Immunity", "logo": SITE + "/assets/img/brand/immunity-logo.webp"}}
 
 PAGES = []
-def render(path, title, desc, body, schemas=None, crumbs=None, prio="0.6"):
+def render(path, title, desc, body, schemas=None, crumbs=None, prio="0.6", lang="en"):
     url = SITE + path
     ld = [ORG] if path == "/" else []
     if crumbs:
@@ -127,7 +127,7 @@ def render(path, title, desc, body, schemas=None, crumbs=None, prio="0.6"):
     ldh = "".join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in ld)
     robots = "noindex,follow" if TRIAL else "index,follow,max-image-preview:large"
     assert len(title) <= 66, (path, len(title), title)
-    out = f'''<!doctype html><html lang="en"><head><meta charset="utf-8">{tracking()}<meta name="viewport" content="width=device-width,initial-scale=1">
+    out = f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8">{tracking()}<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)}</title><meta name="description" content="{esc(desc)}"><meta name="robots" content="{robots}"><link rel="canonical" href="{url}">
 <meta property="og:type" content="website"><meta property="og:site_name" content="{SHORT}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{url}"><meta property="og:image" content="{SITE}/assets/img/brand/gbo-logo.png">
 <meta name="theme-color" content="#1c4720"><link rel="icon" href="/assets/img/brand/gbo-logo.png" type="image/png">
@@ -307,7 +307,7 @@ start("/knowledge")
 kn = hero("Agriculture knowledge", "Plain answers on soil, crops and sustainable farming, from nearly 20 years in the field.", [("Knowledge", None)])
 kn += sec('<div class="grid">' + "".join(card(f"/knowledge/{k['slug']}", k["h1"].split(":")[0], k["desc"], "Pillar guide") for k in KNOW) + "</div>", "Soil and sustainability")
 kn += sec('<div class="grid">' + "".join(card(f"/crop-problems/{x['slug']}", cap(x["h1"]), x["desc"], CBY[x["crop"]]["name"]) for x in PROBLEMS) + "</div>", "Crop problems", tint=True)
-kn += sec('<div class="grid">' + "".join(card(f"/guides/{g['slug']}", g["h1"], g["desc"], "Guide") for g in GUIDES) + '</div><p class="note" style="margin-top:18px">More articles from our old website are being checked and moved here.</p>', "Farming guides")
+kn += sec('<div class="grid">' + "".join(card(f"/guides/{g['slug']}", g["h1"], g["desc"], "Guide") for g in GUIDES) + '</div><div class="btns"><a class="btn btn-leaf" href="/articles">All articles</a></div>', "Farming guides")
 render("/knowledge", "Agriculture Knowledge: Soil, Crops, Sustainability | GBO", "Guides on soil health, soil fertility, sustainable farming and the 5 Rs, crop problems and practical farming topics from Gujarat Bio Organics.",
        kn, None, [("Knowledge", None)], "0.8")
 
@@ -339,6 +339,39 @@ render("/guides", "Farming Guides: Biostimulants, Compost, Soil Tests | GBO",
        hero("Farming guides", "Plain answers to the questions farmers ask us most.", [("Knowledge", "/knowledge"), ("Guides", None)])
        + sec('<div class="grid">' + "".join(card(f"/guides/{g['slug']}", g["h1"], g["desc"], "Guide") for g in GUIDES) + "</div>") + enquiry_box(), None, [("Knowledge", "/knowledge"), ("Guides", None)], "0.7")
 for g in GUIDES: article_page(f"/guides/{g['slug']}", "Guides", "/guides", g)
+
+# ---------------------------------------------------------------- articles (moved from the old website)
+ARTICLES = json.load(open(os.path.join(ROOT, "content_articles.json"), encoding="utf-8"))
+ACAT = [("soil", "Soil health"), ("compost", "Compost"), ("crops", "Crop guides"), ("organic", "Organic and sustainable farming")]
+def md_html(t):
+    out, ul_open = [], False
+    for b in t.split("\n\n"):
+        b = b.strip()
+        if b.startswith("- "):
+            if not ul_open: out.append("<ul>"); ul_open = True
+            out.append(f"<li>{esc(b[2:])}</li>"); continue
+        if ul_open: out.append("</ul>"); ul_open = False
+        m = re.match(r"^(#{2,4}) (.*)", b)
+        if m: lvl = min(len(m.group(1)), 3); out.append(f"<h{lvl}>{esc(m.group(2))}</h{lvl}>")
+        else: out.append(f"<p>{esc(b)}</p>")
+    if ul_open: out.append("</ul>")
+    return "".join(out)
+start("/articles")
+ah = hero("Articles", f"{len(ARTICLES)} articles on soil, compost, crops and sustainable farming by Gafar Laiya and the Gujarat Bio Organics team, in English and Hindi.", [("Knowledge", "/knowledge"), ("Articles", None)])
+ah += sec('<div class="chips">' + "".join(f'<a href="#{c}">{esc(t)}</a>' for c, t in ACAT) + '</div>')
+for i, (c, t) in enumerate(ACAT):
+    items = [a for a in ARTICLES if a["cat"] == c]
+    ah += sec('<div class="grid">' + "".join(card(f"/articles/{a['slug']}", a["h1"], (a["desc"] or a["body"][:150])[:160], "Hindi" if a["lang"] == "hi" else "English") for a in items) + "</div>", t, tint=(i % 2 == 0), id=c)
+render("/articles", "Farming Articles: Soil, Compost, Crops, Organic | GBO", "Articles on soil health, composting, crop problems and sustainable farming from Gujarat Bio Organics, in English and Hindi.",
+       ah, None, [("Knowledge", "/knowledge"), ("Articles", None)], "0.7")
+for a in ARTICLES:
+    path = f"/articles/{a['slug']}"; start(path)
+    rel = [x for x in ARTICLES if x["cat"] == a["cat"] and x["slug"] != a["slug"]][:3]
+    body = hero(a["h1"], a["desc"] or "", [("Articles", "/articles"), (a["h1"][:40], None)], light=True)
+    body += sec(f'<div class="prose">{md_html(a["body"])}<p class="note">By Gafar Laiya, founder of {SHORT}, working with farmers since 2006. {RESULTS}</p></div>')
+    body += sec('<div class="grid">' + "".join(card(f"/articles/{x['slug']}", x["h1"], (x["desc"] or "")[:140], "Read next") for x in rel) + "</div>", "Read next", tint=True) + enquiry_box()
+    t = a["title"] if len(a["title"]) <= 66 else a["title"][:63].rsplit(" ", 1)[0] + "..."
+    render(path, t, (a["desc"] or a["h1"])[:160], body, [article_ld(path, a["h1"], a["desc"] or a["h1"])], [("Articles", "/articles"), (a["h1"][:40], None)], "0.6", a["lang"])
 
 # ---------------------------------------------------------------- about / story / impact / quality / factory
 start("/about")
