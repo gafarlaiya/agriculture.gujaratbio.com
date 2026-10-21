@@ -84,7 +84,9 @@ def pimg(p, w=None):
     f = os.path.join(ROOT, "assets", "img", "products", p["slug"] + ".webp")
     if os.path.exists(f):
         src = f"/assets/img/products/{'thumb/' if w == 'thumb' else ''}{p['slug']}.webp"
-        return f'<img src="{src}" alt="{esc(p["name"])} bottle" loading="lazy" decoding="async" width="200" height="300">'
+        from PIL import Image as _I
+        iw, ih = _I.open(os.path.join(ROOT, src.lstrip("/"))).size
+        return f'<img src="{src}" alt="{esc(p["name"])} bottle" loading="lazy" decoding="async" width="{iw}" height="{ih}">'
     MEDIA.append((p["slug"] + ".webp", "img", f"Product photo of {p['name']} pack on white background (save in assets/img/products/)", _CUR["page"]))
     return f'<span class="noimg">{esc(p["slug"])}.webp</span>'
 
