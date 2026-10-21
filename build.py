@@ -83,7 +83,7 @@ def gallery(items):
 def pimg(p, w=None):
     f = os.path.join(ROOT, "assets", "img", "products", p["slug"] + ".webp")
     if os.path.exists(f):
-        return f'<img src="/assets/img/products/{p["slug"]}.webp" alt="{esc(p["name"])} bottle" loading="lazy">'
+        return f'<img src="/assets/img/products/{p["slug"]}.webp" alt="{esc(p["name"])} bottle" loading="lazy" decoding="async" width="200" height="300">'
     MEDIA.append((p["slug"] + ".webp", "img", f"Product photo of {p['name']} pack on white background (save in assets/img/products/)", _CUR["page"]))
     return f'<span class="noimg">{esc(p["slug"])}.webp</span>'
 
@@ -107,7 +107,7 @@ def header(path):
             s = f'<div class="sub{" wide" if len(sub) > 8 else ""}">' + "".join(f'<a href="{u}">{esc(n)}</a>' for u, n in sub) + "</div>"
         items.append(f'<div class="ni"><a href="{h}"{cur}>{t}</a>{s}</div>')
     trial = '<span class="t">Trial version of the new website.</span>' if TRIAL else "<span></span>"
-    return f'''<a class="skip" href="#main">Skip to content</a><div class="strip"><div class="wrap">{trial}<span><a href="tel:{TEL}">{PHONE}</a> &middot; <a href="{OLD_SITE}" rel="nofollow">Want to see our old website? Click here</a></span></div></div>
+    return f'''<a class="skip" href="#main">Skip to content</a><div class="strip"><div class="wrap">{trial}<span><a href="tel:{TEL}">{PHONE}</a> &middot; <a href="{OLD_SITE}" rel="nofollow">Visit our old website</a></span></div></div>
 <header class="top"><div class="wrap"><a class="brand" href="/"><img src="/assets/img/brand/gbo-logo.webp" alt="Gujarat Bio Organics logo" width="46" height="46"><span class="bt"><b>Gujarat Bio Organics</b><span>Working with farmers since 2006</span></span></a>
 <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button><nav class="nav" id="nav" aria-label="Main">{"".join(items)}<a class="enq" href="/enquiry" data-ev="begin_enquiry">Send enquiry</a></nav></div></header>'''
 
@@ -181,7 +181,7 @@ def render(path, title, desc, body, schemas=None, crumbs=None, prio="0.6", lang=
 <title>{esc(title)}</title><meta name="description" content="{esc(desc)}"><meta name="robots" content="{robots}"><link rel="canonical" href="{url}">
 <meta property="og:type" content="website"><meta property="og:site_name" content="{SHORT}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{url}"><meta property="og:image" content="{SITE}{og or "/assets/img/brand/gbo-logo.png"}"><meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1c4720"><link rel="icon" href="/assets/img/brand/gbo-logo.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="{FONT}">
+<link rel="preload" href="/assets/fonts/mukta-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/assets/fonts/baloo-2-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>{CSS}</style>{ldh}</head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id={GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {header(path)}<main id="main">{body}</main>{footer()}<script>{JS}</script></body></html>'''
     d = ROOT if path == "/" else os.path.join(ROOT, path.strip("/"))
@@ -209,7 +209,7 @@ def body_of(x): return ul(x, "") if isinstance(x, list) else f"<p>{esc(x)}</p>"
 def answer(t): return f'<p class="answer">{esc(t)}</p>'
 def faq_html(qs): return '<div class="faq">' + "".join(f"<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for q, a in qs) + "</div>"
 def faq_ld(qs): return {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in qs]}
-def card(href, title, text, meta="", more="Read more"):
+def card(href, title, text, meta="", more="Read the full guide"):
     m = f'<div class="meta">{esc(meta)}</div>' if meta else ""
     return f'<article class="card">{m}<h3><a href="{href}">{esc(title)}</a></h3><p>{esc(text)}</p><a class="more" href="{href}">{esc(more)}</a></article>'
 def pcard(p): return f'<a class="pcard" href="/products/{p["slug"]}">{pimg(p)}<span><h3>{esc(p["name"])}</h3><p>{esc(p["line"])}</p><p class="note" style="margin-top:6px">Price on enquiry &middot; Where to buy</p></span></a>'
@@ -502,7 +502,7 @@ im += sec('''<div class="grid two"><div class="prose"><h3>Eliminate hunger</h3><
 <div class="prose"><h3>Farmers' income</h3><p>Many of our formulas came from growers who were no longer breaking even. Our work is judged by whether the farm pays, as farmers themselves report.</p></div></div>''', "What we work for", tint=True)
 im += sec('<div class="grid">' + media("impact-before-after-soil.webp", "Before and after photo of the same field or soil after a season of soil care") + media("impact-farmer-family.webp", "Farmer family with their harvest")
           + media("impact-video.mp4", "Short video on soil health and food security, with farmers speaking", "video") + f'</div><p class="note" style="margin-top:14px">{RESULTS}</p>', "Impact on the ground")
-im += sec('<div class="grid">' + "".join(card(f"/knowledge/{k['slug']}", k["h1"].split(":")[0], k["desc"], "Read") for k in KNOW) + "</div>", "Learn more", tint=True)
+im += sec('<div class="grid">' + "".join(card(f"/knowledge/{k['slug']}", k["h1"].split(":")[0], k["desc"], "Read", "Read the full guide") for k in KNOW) + "</div>", "Learn more", tint=True)
 render("/our-impact", "Our Impact: Soil Health, Food Security, Fewer Chemicals | GBO", "How Gujarat Bio Organics works for healthier soil, fewer hazardous chemicals, better farm income and food security.",
        im, None, [("About", "/about"), ("Our impact", None)], "0.6")
 
