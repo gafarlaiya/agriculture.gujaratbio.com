@@ -125,3 +125,6 @@ p{margin:0 0 1em}ul{margin:0 0 1em;padding-left:1.2em}li{margin:.25em 0}
 .pshot img{max-width:100%;height:auto;max-height:420px}
 @media(max-width:480px){.picker a{grid-template-columns:minmax(0,1fr) 38px;padding:14px 12px 12px;min-height:0}.picker a img{width:38px;height:70px}.picker a b{font-size:1.25rem}.picker a span{font-size:.85rem}}
 .slot{flex-direction:column;gap:2px}
+.gal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media(max-width:820px){.gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gal img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:block}
+.media img{max-height:520px;object-fit:cover}.media video{max-height:560px;background:#000}

@@ -44,16 +44,34 @@ def btn_enq(label="Send enquiry", q=""): return f'<a class="btn btn-leaf" href="
 # ---------------------------------------------------------------- media slots
 MEDIA = []  # (file, kind, description, page)
 _CUR = {"page": "/"}
+# Slots filled by one shared file (field videos from ganna.in), with the poster image shown before play
+ALIAS = {"crop-sugarcane-farmer-video-1.mp4": "sugarcane-farmer-field.mp4", "home-video-sugarcane-farmer.mp4": "sugarcane-farmer-field.mp4",
+         "story-sugarcane-1.mp4": "sugarcane-farmer-field.mp4", "crop-sugarcane-field-visit.mp4": "sugarcane-field-walk.mp4",
+         "immunity-sugarcane-special-farmer-story.mp4": "sugarcane-field-walk.mp4", "story-sugarcane-2.mp4": "sugarcane-field-walk.mp4"}
+POSTER = {"sugarcane-farmer-field.mp4": "gallery/farmer-field-poster.webp", "sugarcane-field-walk.mp4": "gallery/field-walk-poster.webp"}
 def media(fname, desc, kind="img", cls=""):
     """A named photo/video slot. If assets/media/<fname> exists it is shown; otherwise a labelled placeholder."""
     MEDIA.append((fname, kind, desc, _CUR["page"]))
-    path = os.path.join(ROOT, "assets", "media", fname)
+    real = ALIAS.get(fname, fname)
+    path = os.path.join(ROOT, "assets", "media", real)
     if os.path.exists(path):
         if kind == "video":
-            return f'<div class="media {cls}"><video controls preload="none" playsinline src="/assets/media/{fname}" aria-label="{esc(desc)}"></video></div>'
+            pst = f' poster="/assets/media/{POSTER[real]}"' if real in POSTER else ""
+            return f'<div class="media {cls}"><video controls preload="none" playsinline{pst} src="/assets/media/{real}" aria-label="{esc(desc)}"></video></div>'
         return f'<div class="media {cls}"><img src="/assets/media/{fname}" alt="{esc(desc)}" loading="lazy"></div>'
     label = "Video coming soon" if kind == "video" else "Photo coming soon"
     return f'<div class="slot {"video " if kind == "video" else ""}{cls}" role="img" aria-label="{esc(label + ": " + desc)}"><span>{label}</span><span class="fn">{esc(fname)}</span><span class="ds">{esc(desc)}</span></div>'
+
+GANNA = "https://ganna.in"
+def ganna_box():
+    u = "?utm_source=gujaratbio_farmer_site&amp;utm_medium=referral&amp;utm_campaign=sugarcane"
+    return sec(f'''<div class="grid two"><div class="prose"><h3>Sugarcane grower? Visit ganna.in</h3><p>ganna.in is our sugarcane website in Gujarati: the stage-wise Immunity Sugarcane Program, a vigha and acre dose schedule, the sugarcane knowledge centre, and results from growers in Surat and Navsari.</p>
+<div class="btns"><a class="btn btn-leaf" href="{GANNA}/sugarcane-program/{u}" rel="noopener">Sugarcane Program</a><a class="btn btn-line" href="{GANNA}/sugarcane-dosage-schedule/{u}" rel="noopener">Dose schedule</a><a class="btn btn-line" href="{GANNA}/farmer-results/{u}" rel="noopener">Farmer results</a></div></div>
+<div>{media("ganna-in-farmers-gallery.webp", "Farmers with Immunity products in a sugarcane field (from ganna.in)")}</div></div>''', tint=True)
+GAL_F = [(f"field-{i:02d}", "Field visit with sugarcane growers") for i in range(1, 17)]
+GAL_E = [(f"expo-{i:02d}", "Farmers at the Immunity stall at a farmer fair") for i in range(1, 15)]
+def gallery(items):
+    return '<div class="gal">' + "".join(f'<a href="/assets/media/gallery/{n}.webp"><img src="/assets/media/gallery/{n}-t.webp" alt="{esc(d)}" loading="lazy" width="480" height="360"></a>' for n, d in items) + "</div>"
 
 def pimg(p, w=None):
     f = os.path.join(ROOT, "assets", "img", "products", p["slug"] + ".webp")
@@ -96,7 +114,7 @@ def footer():
 <p><a href="{SOCIAL[0]}" rel="noopener">Facebook</a> &middot; <a href="{SOCIAL[1]}" rel="noopener">YouTube</a></p></div>
 <div><h2>Crops</h2><ul>{crops}<li><a href="/crops">All crops</a></li></ul></div>
 <div><h2>Immunity</h2><ul>{"".join(f'<li><a href="/products#{g}">{t}</a></li>' for g, t, _ in GROUPS)}<li><a href="/where-to-buy">Where to buy</a></li><li><a href="/enquiry">Send enquiry</a></li></ul></div>
-<div><h2>Company</h2><ul><li><a href="/about">About us</a></li><li><a href="/our-story">Our story</a></li><li><a href="/our-impact">Our impact</a></li><li><a href="/quality">Quality and approvals</a></li><li><a href="/farmer-stories">Farmer stories</a></li><li><a href="/knowledge">Knowledge</a></li><li><a href="/dealers">Dealers</a></li><li><a href="/contact">Contact</a></li><li><a href="/privacy-policy">Privacy</a></li><li><a href="/terms">Terms</a></li><li><a href="/shipping-and-returns">Shipping and returns</a></li><li><a href="{OLD_SITE}" rel="nofollow">Old website</a></li></ul></div>
+<div><h2>Company</h2><ul><li><a href="/about">About us</a></li><li><a href="/our-story">Our story</a></li><li><a href="/our-impact">Our impact</a></li><li><a href="/quality">Quality and approvals</a></li><li><a href="/farmer-stories">Farmer stories</a></li><li><a href="/knowledge">Knowledge</a></li><li><a href="/dealers">Dealers</a></li><li><a href="/contact">Contact</a></li><li><a href="/privacy-policy">Privacy</a></li><li><a href="/terms">Terms</a></li><li><a href="/shipping-and-returns">Shipping and returns</a></li><li><a href="{OLD_SITE}" rel="nofollow">Old website</a></li></ul><h2>Our websites</h2><ul><li><a href="{GANNA}/" rel="noopener">ganna.in: sugarcane (Gujarati)</a></li><li><a href="{B2B}/">b2b.gujaratbio.com: bulk, OEM, export</a></li></ul></div>
 </div><p class="note" style="color:#bfb3a5;margin-top:20px">{RESULTS}</p><p class="note" style="color:#bfb3a5">&copy; 2026 {NAME}. Immunity is a brand of {SHORT}.</p></div></footer>
 <nav class="bar" aria-label="Quick contact"><a class="c" href="tel:{TEL}" data-ev="click_phone">Call</a><a class="w" href="{wa("Hello Gujarat Bio Organics, I need help with my crop.")}" data-ev="click_whatsapp">WhatsApp</a></nav>'''
 
@@ -135,7 +153,7 @@ JS = ("document.querySelector('.menu-btn')?.addEventListener('click',function(){
       "o.push(['MOP (60% K2O)',K/0.6,50]);document.getElementById('cout').innerHTML=o.map(function(x){var kg=x[1]*A;return '<tr><td>'+x[0]+'</td><td>'+kg.toFixed(1)+' kg</td><td>'+(kg/x[2]).toFixed(1)+' bags of '+x[2]+' kg</td></tr>'}).join('')}")
 
 ORG = {"@context": "https://schema.org", "@type": "Organization", "@id": SITE + "/#org", "name": NAME, "alternateName": ["Gujarat Bio Organics", "GBO"],
-       "url": SITE + "/", "logo": SITE + "/assets/img/brand/gbo-logo.png", "foundingDate": "2006", "email": MAIL, "telephone": TEL, "sameAs": SOCIAL + [B2B + "/"],
+       "url": SITE + "/", "logo": SITE + "/assets/img/brand/gbo-logo.png", "foundingDate": "2006", "email": MAIL, "telephone": TEL, "sameAs": SOCIAL + [B2B + "/", "https://ganna.in/"],
        "address": {"@type": "PostalAddress", "streetAddress": "Plot No. 321, GIDC 2, Ghanghali Road, Shihor", "addressLocality": "Bhavnagar", "addressRegion": "Gujarat", "postalCode": "364240", "addressCountry": "IN"},
        "brand": {"@type": "Brand", "name": "Immunity", "logo": SITE + "/assets/img/brand/immunity-logo.webp"}}
 
@@ -265,6 +283,7 @@ for c in CROPS:
     if c["slug"] == "potato": body += sec('<p class="prose">See the <a href="/knowledge/potato-fertilizer-schedule">potato fertilizer schedule</a>: what to apply at each stage.</p>')
     if carts:
         body += sec('<div class="grid">' + "".join(card(f"/articles/{a['slug']}", a["h1"], (a["desc"] or "")[:140], "Hindi article" if a["lang"] == "hi" else "Article") for a in carts) + "</div>", f"Articles on {c['name'].lower()}")
+    if c["slug"] == "sugarcane": body += ganna_box() + sec(gallery(GAL_F[:8]), "From sugarcane fields")
     body += sec(faq_html(c["faq"]), f"{c['name']} questions", tint=not carts) + enquiry_box(c["name"], p["name"])
     title = f"{c['name']} Farming Guide: Stages, Problems & Care | GBO"
     if len(title) > 66: title = f"{c['name']} Guide: Stages, Problems & Care | GBO"
@@ -307,6 +326,7 @@ for p in PRODUCTS:
             (f"What pack sizes does {p['name']} come in?", packs + "."),
             (f"What is the price of {p['name']}?", "Prices are shared on enquiry, together with the nearest place to buy. Send an enquiry or WhatsApp us."),
             ("How much should I use?", "The dose depends on crop, stage and soil. Follow the label, or ask us for a schedule for your field.")]
+    if p["slug"] in ("immunity-sugarcane-special", "immunity-granules", "immunity-gold"): body += ganna_box()
     body += sec(faq_html(pfaq), "Questions") + enquiry_box(c["name"] if c else "", p["name"])
     prod_ld = {"@context": "https://schema.org", "@type": "Product", "name": p["name"], "description": p["line"], "brand": {"@type": "Brand", "name": "Immunity"},
                "manufacturer": {"@id": SITE + "/#org"}, "category": GNAME[p["group"]]}
@@ -330,6 +350,7 @@ for i, c in enumerate(CROPS[:10]):
     fs += sec('<div class="grid">' + media(f"story-{c['slug']}-1.mp4", f"{c['name']} farmer story 1: farmer in his field, name and village on screen", "video")
               + media(f"story-{c['slug']}-2.mp4", f"{c['name']} farmer story 2", "video") + media(f"story-{c['slug']}-photo.webp", f"Photo of a {c['name'].lower()} farmer with his crop or harvest") + "</div>",
               f"{c['name']} growers", tint=(i % 2 == 0), id=c["slug"])
+fs += sec(gallery(GAL_F) , "Field visits", "Our team with growers in their fields.") + sec(gallery(GAL_E), "At farmer fairs", "Farmers at the Immunity stall.", tint=True) + ganna_box()
 fs += sec(f'<p class="prose">Have you used Immunity on your farm? Send us your story and photos on WhatsApp. With your permission, we will share it to help other farmers.</p><div class="btns">{btn_wa("Hello Gujarat Bio Organics, I want to share my farm story.", "Share your story")}</div>', "Share your story")
 render("/farmer-stories", "Farmer Stories and Videos | Gujarat Bio Organics", "Sugarcane, potato, mango, apple, banana and other growers tell what they faced on their farms and what changed. Videos and farmer reports.",
        fs, None, [("Farmer stories", None)], "0.8")
@@ -354,7 +375,7 @@ def article_page(path, basename, baseurl, x, crop=None, hero_media=None):
         c = CBY[crop]; p = PBY[c["product"]]
         inner += f'<p>See the full <a href="/crops/{crop}">{c["name"].lower()} guide</a> and <a href="/products/{p["slug"]}">{p["name"]}</a>.</p>'
     inner += f'<p class="note">Written by Gafar Laiya, founder of {SHORT}, working with farmers since 2006. {RESULTS}</p>'
-    body += sec(f'<div class="prose">{inner}</div>') + sec(faq_html(x["faq"]), "Questions", tint=True) + x.get("extra", "") + enquiry_box(CBY[crop]["name"] if crop else "")
+    body += sec(f'<div class="prose">{inner}</div>') + sec(faq_html(x["faq"]), "Questions", tint=True) + x.get("extra", "") + (ganna_box() if crop == "sugarcane" else "") + enquiry_box(CBY[crop]["name"] if crop else "")
     render(path, x["title"] if len(x["title"]) <= 66 else x["title"][:66], x["desc"], body, [faq_ld(x["faq"]), article_ld(path, x["h1"], x["desc"])],
            [(basename, baseurl), (x["h1"].split(":")[0][:40], None)], "0.7")
 
@@ -456,6 +477,7 @@ st = hero("Our story: nearly 20 years on Indian farms", "From one company in Bha
 st += sec(f'<div class="hero-grid"><div>{tl}</div><div>{media("story-2006-early-days.webp", "Old photo from the early years: first products, first factory or first field visits")}{media("story-field-work-collage.webp", "Collage of field visits across crops and states over the years")}</div></div>', "The journey")
 st += sec('<div class="grid">' + media("story-video-20-years.mp4", "Video: 20 years in the field, told by Gafar Laiya with old photos and farmer clips", "video")
           + media("story-sugarcane-south-gujarat.webp", "Photo from the sugarcane work in South Gujarat") + media("story-apple-himachal.webp", "Photo from the apple orchards in Himachal Pradesh") + "</div>", "Moments from the field", tint=True)
+st += sec(gallery(GAL_F[8:] + GAL_E[:8]), "From the field and farmer fairs")
 st += enquiry_box(title="Talk to us")
 render("/our-story", "Our Story Since 2006 | Gujarat Bio Organics", "Gujarat Bio Organics' journey since 2006: from field work with sugarcane, apple, potato, mango and banana growers to the Immunity range for 20 crops.",
        st, None, [("About", "/about"), ("Our story", None)], "0.7")
@@ -622,7 +644,7 @@ with open(os.path.join(ROOT, "MEDIA_LIST.csv"), "w", newline="", encoding="utf-8
     for fn, kind, desc, page in MEDIA:
         if fn in seen: continue
         seen.add(fn)
-        here = os.path.exists(os.path.join(ROOT, "assets", "media", fn)) or os.path.exists(os.path.join(ROOT, "assets", "img", "products", fn))
+        here = os.path.exists(os.path.join(ROOT, "assets", "media", ALIAS.get(fn, fn))) or os.path.exists(os.path.join(ROOT, "assets", "img", "products", fn))
         w.writerow([fn, "video (MP4)" if kind == "video" else "photo (JPG/WEBP)", desc, SITE + page, "received" if here else "needed"])
 
 exec(open(os.path.join(ROOT, "redirects_map.py"), encoding="utf-8").read())

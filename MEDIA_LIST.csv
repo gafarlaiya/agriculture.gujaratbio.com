@@ -1,16 +1,17 @@
 file name,type,what to shoot,first used on page,status
 home-founder-in-field.webp,photo (JPG/WEBP),"Gafar Laiya with a farmer in a crop field, both looking at the crop, natural daylight",https://agriculture.gujaratbio.com/,needed
-home-video-sugarcane-farmer.mp4,video (MP4),"Sugarcane farmer in South Gujarat talking about his crop, filmed in his field",https://agriculture.gujaratbio.com/,needed
+home-video-sugarcane-farmer.mp4,video (MP4),"Sugarcane farmer in South Gujarat talking about his crop, filmed in his field",https://agriculture.gujaratbio.com/,received
 home-video-apple-grower.mp4,video (MP4),Apple grower in Himachal Pradesh walking through his orchard and talking about tree health,https://agriculture.gujaratbio.com/,needed
 home-video-mango-grower.mp4,video (MP4),"Mango grower showing his trees and fruit, talking about flowering and fruit set",https://agriculture.gujaratbio.com/,needed
-home-dealer-shop-display.webp,photo (JPG/WEBP),Agri input shop counter with Immunity bottles on display and the shop owner,https://agriculture.gujaratbio.com/,needed
-crop-sugarcane-hero.webp,photo (JPG/WEBP),"Wide photo of a healthy sugarcane crop in the field, ideally with the farmer, in Gujarat",https://agriculture.gujaratbio.com/crops/sugarcane,needed
+home-dealer-shop-display.webp,photo (JPG/WEBP),Agri input shop counter with Immunity bottles on display and the shop owner,https://agriculture.gujaratbio.com/,received
+crop-sugarcane-hero.webp,photo (JPG/WEBP),"Wide photo of a healthy sugarcane crop in the field, ideally with the farmer, in Gujarat",https://agriculture.gujaratbio.com/crops/sugarcane,received
 crop-sugarcane-problem-1.webp,photo (JPG/WEBP),Close-up photo of a common sugarcane problem in the field (for example: poor germination and gaps),https://agriculture.gujaratbio.com/crops/sugarcane,needed
 crop-sugarcane-problem-2.webp,photo (JPG/WEBP),Close-up photo of another sugarcane problem: plants dying after germination,https://agriculture.gujaratbio.com/crops/sugarcane,needed
-crop-sugarcane-healthy.webp,photo (JPG/WEBP),"Close-up photo of a healthy sugarcane plant, roots or produce for comparison",https://agriculture.gujaratbio.com/crops/sugarcane,needed
-crop-sugarcane-farmer-video-1.mp4,video (MP4),Sugarcane farmer talking in his field about his crop and what changed,https://agriculture.gujaratbio.com/crops/sugarcane,needed
+crop-sugarcane-healthy.webp,photo (JPG/WEBP),"Close-up photo of a healthy sugarcane plant, roots or produce for comparison",https://agriculture.gujaratbio.com/crops/sugarcane,received
+crop-sugarcane-farmer-video-1.mp4,video (MP4),Sugarcane farmer talking in his field about his crop and what changed,https://agriculture.gujaratbio.com/crops/sugarcane,received
 crop-sugarcane-farmer-video-2.mp4,video (MP4),"Second sugarcane farmer story, filmed in the field",https://agriculture.gujaratbio.com/crops/sugarcane,needed
-crop-sugarcane-field-visit.mp4,video (MP4),"Our team on a field visit to a sugarcane farm, checking roots and crop",https://agriculture.gujaratbio.com/crops/sugarcane,needed
+crop-sugarcane-field-visit.mp4,video (MP4),"Our team on a field visit to a sugarcane farm, checking roots and crop",https://agriculture.gujaratbio.com/crops/sugarcane,received
+ganna-in-farmers-gallery.webp,photo (JPG/WEBP),Farmers with Immunity products in a sugarcane field (from ganna.in),https://agriculture.gujaratbio.com/crops/sugarcane,received
 crop-potato-hero.webp,photo (JPG/WEBP),"Wide photo of a healthy potato crop in the field, ideally with the farmer, in Punjab",https://agriculture.gujaratbio.com/crops/potato,needed
 crop-potato-problem-1.webp,photo (JPG/WEBP),Close-up photo of a common potato problem in the field (for example: fewer tubers per plant),https://agriculture.gujaratbio.com/crops/potato,needed
 crop-potato-problem-2.webp,photo (JPG/WEBP),Close-up photo of another potato problem: small or uneven tubers,https://agriculture.gujaratbio.com/crops/potato,needed
@@ -158,7 +159,7 @@ immunity-psf.webp,photo (JPG/WEBP),Product photo of Immunity PSF (Phosphate Solu
 immunity-mycorrhiza.webp,photo (JPG/WEBP),Product photo of Immunity Mycorrhiza pack on white background (save in assets/img/products/),https://agriculture.gujaratbio.com/products,needed
 immunity-npk-consortia.webp,photo (JPG/WEBP),Product photo of Immunity NPK Consortia pack on white background (save in assets/img/products/),https://agriculture.gujaratbio.com/products,needed
 immunity-consortia.webp,photo (JPG/WEBP),Product photo of Immunity Consortia pack on white background (save in assets/img/products/),https://agriculture.gujaratbio.com/products,needed
-immunity-sugarcane-special-farmer-story.mp4,video (MP4),Farmer who used Immunity Sugarcane Special talking in his field about his crop,https://agriculture.gujaratbio.com/products/immunity-sugarcane-special,needed
+immunity-sugarcane-special-farmer-story.mp4,video (MP4),Farmer who used Immunity Sugarcane Special talking in his field about his crop,https://agriculture.gujaratbio.com/products/immunity-sugarcane-special,received
 immunity-sugarcane-special-how-to-apply.mp4,video (MP4),Short video showing how Immunity Sugarcane Special is mixed and applied in the field,https://agriculture.gujaratbio.com/products/immunity-sugarcane-special,needed
 immunity-sugarcane-special-label.webp,photo (JPG/WEBP),Clear photo of the back label of Immunity Sugarcane Special showing composition and directions,https://agriculture.gujaratbio.com/products/immunity-sugarcane-special,needed
 immunity-potato-special-farmer-story.mp4,video (MP4),Farmer who used Immunity Potato Special talking in his field about his crop,https://agriculture.gujaratbio.com/products/immunity-potato-special,needed
@@ -266,9 +267,9 @@ immunity-npk-consortia-label.webp,photo (JPG/WEBP),Clear photo of the back label
 immunity-consortia-farmer-story.mp4,video (MP4),Farmer who used Immunity Consortia talking in his field about his crop,https://agriculture.gujaratbio.com/products/immunity-consortia,needed
 immunity-consortia-how-to-apply.mp4,video (MP4),Short video showing how Immunity Consortia is mixed and applied in the field,https://agriculture.gujaratbio.com/products/immunity-consortia,needed
 immunity-consortia-label.webp,photo (JPG/WEBP),Clear photo of the back label of Immunity Consortia showing composition and directions,https://agriculture.gujaratbio.com/products/immunity-consortia,needed
-story-sugarcane-1.mp4,video (MP4),"Sugarcane farmer story 1: farmer in his field, name and village on screen",https://agriculture.gujaratbio.com/farmer-stories,needed
-story-sugarcane-2.mp4,video (MP4),Sugarcane farmer story 2,https://agriculture.gujaratbio.com/farmer-stories,needed
-story-sugarcane-photo.webp,photo (JPG/WEBP),Photo of a sugarcane farmer with his crop or harvest,https://agriculture.gujaratbio.com/farmer-stories,needed
+story-sugarcane-1.mp4,video (MP4),"Sugarcane farmer story 1: farmer in his field, name and village on screen",https://agriculture.gujaratbio.com/farmer-stories,received
+story-sugarcane-2.mp4,video (MP4),Sugarcane farmer story 2,https://agriculture.gujaratbio.com/farmer-stories,received
+story-sugarcane-photo.webp,photo (JPG/WEBP),Photo of a sugarcane farmer with his crop or harvest,https://agriculture.gujaratbio.com/farmer-stories,received
 story-potato-1.mp4,video (MP4),"Potato farmer story 1: farmer in his field, name and village on screen",https://agriculture.gujaratbio.com/farmer-stories,needed
 story-potato-2.mp4,video (MP4),Potato farmer story 2,https://agriculture.gujaratbio.com/farmer-stories,needed
 story-potato-photo.webp,photo (JPG/WEBP),Photo of a potato farmer with his crop or harvest,https://agriculture.gujaratbio.com/farmer-stories,needed
@@ -311,9 +312,9 @@ about-founder-portrait.webp,photo (JPG/WEBP),"Portrait of Gafar Laiya, founder, 
 about-team-group.webp,photo (JPG/WEBP),Group photo of the Gujarat Bio Organics team at the factory,https://agriculture.gujaratbio.com/about,needed
 about-company-video.mp4,video (MP4),"Two-minute company video: our story, factory and farmers",https://agriculture.gujaratbio.com/about,needed
 story-2006-early-days.webp,photo (JPG/WEBP),"Old photo from the early years: first products, first factory or first field visits",https://agriculture.gujaratbio.com/our-story,needed
-story-field-work-collage.webp,photo (JPG/WEBP),Collage of field visits across crops and states over the years,https://agriculture.gujaratbio.com/our-story,needed
+story-field-work-collage.webp,photo (JPG/WEBP),Collage of field visits across crops and states over the years,https://agriculture.gujaratbio.com/our-story,received
 story-video-20-years.mp4,video (MP4),"Video: 20 years in the field, told by Gafar Laiya with old photos and farmer clips",https://agriculture.gujaratbio.com/our-story,needed
-story-sugarcane-south-gujarat.webp,photo (JPG/WEBP),Photo from the sugarcane work in South Gujarat,https://agriculture.gujaratbio.com/our-story,needed
+story-sugarcane-south-gujarat.webp,photo (JPG/WEBP),Photo from the sugarcane work in South Gujarat,https://agriculture.gujaratbio.com/our-story,received
 story-apple-himachal.webp,photo (JPG/WEBP),Photo from the apple orchards in Himachal Pradesh,https://agriculture.gujaratbio.com/our-story,needed
 impact-hero-healthy-field.webp,photo (JPG/WEBP),"Wide photo of a thriving field with the farmer family, showing healthy crop and soil",https://agriculture.gujaratbio.com/our-impact,needed
 impact-before-after-soil.webp,photo (JPG/WEBP),Before and after photo of the same field or soil after a season of soil care,https://agriculture.gujaratbio.com/our-impact,needed
