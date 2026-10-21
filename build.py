@@ -17,6 +17,7 @@ CIN = "U24123GJ2009PTC058701"
 FACTORY = "Plot No. 321, GIDC 2, Ghanghali Road, Shihor, Bhavnagar, Gujarat 364240"
 REGOFF = "First Floor, 110 Shoppers Plaza, Parimal Chowk, Waghawadi Road, Bhavnagar, Gujarat 364002"
 SOCIAL = ["https://www.facebook.com/gujaratbio", "https://www.youtube.com/@Gujaratbio"]
+OWNER_LINE = f"This website is owned and maintained by {NAME.replace('Pvt. Ltd.', 'Private Limited')} (CIN {CIN}), Bhavnagar, Gujarat, India."
 RESULTS = "Results differ from farm to farm with soil, weather, crop and management. Farmer experiences on this site are their own reports, not a promise of results."
 
 for _f in ("content_products.py", "content_crops.py", "content_crops2.py", "content_knowledge.py", "content_pages.py"):
@@ -62,6 +63,11 @@ def media(fname, desc, kind="img", cls=""):
     label = "Video coming soon" if kind == "video" else "Photo coming soon"
     return f'<div class="slot {"video " if kind == "video" else ""}{cls}" role="img" aria-label="{esc(label + ": " + desc)}"><span>{label}</span><span class="fn">{esc(fname)}</span><span class="ds">{esc(desc)}</span></div>'
 
+SITES = [("https://www.gujaratbio.com/", "www.gujaratbio.com", "Main company website: Immunity products, crop guides and farmer knowledge (this site, after the trial)."),
+         ("https://agriculture.gujaratbio.com/", "agriculture.gujaratbio.com", "Trial address of the new main website."),
+         ("https://b2b.gujaratbio.com/", "b2b.gujaratbio.com", "Business buyers: bulk supply, private label, OEM and export of biostimulants and biofertilizers."),
+         ("https://ganna.in/", "ganna.in", "Sugarcane growers, in Gujarati: Immunity Sugarcane Program, dose schedule and farmer results."),
+         ("https://en.gujaratbio.com/", "en.gujaratbio.com", "Our previous website, kept for reference for a limited time.")]
 GANNA = "https://ganna.in"
 def ganna_box():
     u = "?utm_source=gujaratbio_farmer_site&amp;utm_medium=referral&amp;utm_campaign=sugarcane"
@@ -114,8 +120,8 @@ def footer():
 <p><a href="{SOCIAL[0]}" rel="noopener">Facebook</a> &middot; <a href="{SOCIAL[1]}" rel="noopener">YouTube</a></p></div>
 <div><h2>Crops</h2><ul>{crops}<li><a href="/crops">All crops</a></li></ul></div>
 <div><h2>Immunity</h2><ul>{"".join(f'<li><a href="/products#{g}">{t}</a></li>' for g, t, _ in GROUPS)}<li><a href="/where-to-buy">Where to buy</a></li><li><a href="/enquiry">Send enquiry</a></li></ul></div>
-<div><h2>Company</h2><ul><li><a href="/about">About us</a></li><li><a href="/our-story">Our story</a></li><li><a href="/our-impact">Our impact</a></li><li><a href="/quality">Quality and approvals</a></li><li><a href="/farmer-stories">Farmer stories</a></li><li><a href="/knowledge">Knowledge</a></li><li><a href="/dealers">Dealers</a></li><li><a href="/contact">Contact</a></li><li><a href="/privacy-policy">Privacy</a></li><li><a href="/terms">Terms</a></li><li><a href="/shipping-and-returns">Shipping and returns</a></li><li><a href="{OLD_SITE}" rel="nofollow">Old website</a></li></ul><h2>Our websites</h2><ul><li><a href="{GANNA}/" rel="noopener">ganna.in: sugarcane (Gujarati)</a></li><li><a href="{B2B}/">b2b.gujaratbio.com: bulk, OEM, export</a></li></ul></div>
-</div><p class="note" style="color:#bfb3a5;margin-top:20px">{RESULTS}</p><p class="note" style="color:#bfb3a5">&copy; 2026 {NAME}. Immunity is a brand of {SHORT}.</p></div></footer>
+<div><h2>Company</h2><ul><li><a href="/about">About us</a></li><li><a href="/our-story">Our story</a></li><li><a href="/our-impact">Our impact</a></li><li><a href="/quality">Quality and approvals</a></li><li><a href="/farmer-stories">Farmer stories</a></li><li><a href="/knowledge">Knowledge</a></li><li><a href="/dealers">Dealers</a></li><li><a href="/contact">Contact</a></li><li><a href="/privacy-policy">Privacy</a></li><li><a href="/terms">Terms</a></li><li><a href="/shipping-and-returns">Shipping and returns</a></li><li><a href="{OLD_SITE}" rel="nofollow">Old website</a></li></ul><h2>Our websites</h2><ul><li><a href="{GANNA}/" rel="noopener">ganna.in: sugarcane (Gujarati)</a></li><li><a href="{B2B}/">b2b.gujaratbio.com: bulk, OEM, export</a></li><li><a href="/our-websites">All our websites</a></li></ul></div>
+</div><p class="note" style="color:#bfb3a5;margin-top:20px">{RESULTS}</p><p class="note" style="color:#bfb3a5">{OWNER_LINE} &copy; 2026 Gujarat Bio Organics Private Limited. All rights reserved. Immunity is a brand of {SHORT}. <a href="/about#this-website">About this website</a> &middot; <a href="/our-websites">Our websites</a></p></div></footer>
 <nav class="bar" aria-label="Quick contact"><a class="c" href="tel:{TEL}" data-ev="click_phone">Call</a><a class="w" href="{wa("Hello Gujarat Bio Organics, I need help with my crop.")}" data-ev="click_whatsapp">WhatsApp</a></nav>'''
 
 def tracking():
@@ -152,7 +158,7 @@ JS = ("document.querySelector('.menu-btn')?.addEventListener('click',function(){
       "if(src==='dap'){var dap=P/0.46,urea=Math.max(0,N-dap*0.18)/0.46;o=[['DAP (18-46-0)',dap,50],['Urea (46% N)',urea,45]]}else{o=[['SSP (16% P2O5)',P/0.16,50],['Urea (46% N)',N/0.46,45]]}"
       "o.push(['MOP (60% K2O)',K/0.6,50]);document.getElementById('cout').innerHTML=o.map(function(x){var kg=x[1]*A;return '<tr><td>'+x[0]+'</td><td>'+kg.toFixed(1)+' kg</td><td>'+(kg/x[2]).toFixed(1)+' bags of '+x[2]+' kg</td></tr>'}).join('')}")
 
-ORG = {"@context": "https://schema.org", "@type": "Organization", "@id": SITE + "/#org", "name": NAME, "alternateName": ["Gujarat Bio Organics", "GBO"],
+ORG = {"@context": "https://schema.org", "@type": "Organization", "@id": SITE + "/#org", "name": NAME, "legalName": "Gujarat Bio Organics Private Limited", "alternateName": ["Gujarat Bio Organics", "GBO"], "identifier": {"@type": "PropertyValue", "propertyID": "CIN", "value": CIN},
        "url": SITE + "/", "logo": SITE + "/assets/img/brand/gbo-logo.png", "foundingDate": "2006", "email": MAIL, "telephone": TEL, "sameAs": SOCIAL + [B2B + "/", "https://ganna.in/"],
        "address": {"@type": "PostalAddress", "streetAddress": "Plot No. 321, GIDC 2, Ghanghali Road, Shihor", "addressLocality": "Bhavnagar", "addressRegion": "Gujarat", "postalCode": "364240", "addressCountry": "IN"},
        "brand": {"@type": "Brand", "name": "Immunity", "logo": SITE + "/assets/img/brand/immunity-logo.webp"}}
@@ -249,7 +255,7 @@ home += sec(f'<div class="grid two"><div class="prose"><p>Shop owners and distri
 home += sec(faq_html(home_faq), "Questions farmers ask", tint=True)
 render("/", "Gujarat Bio Organics | Bio & Organic Fertilizer Manufacturer",
        "Bio and organic fertilizer manufacturer in Bhavnagar, Gujarat since 2006. Immunity crop formulas for 20 crops, biostimulants and biofertilizers. Send an enquiry.",
-       home, [faq_ld(home_faq), {"@context": "https://schema.org", "@type": "WebSite", "url": SITE + "/", "name": SHORT, "publisher": {"@id": SITE + "/#org"}}], None, "1.0")
+       home, [faq_ld(home_faq), {"@context": "https://schema.org", "@type": "WebSite", "url": SITE + "/", "name": SHORT, "publisher": {"@id": SITE + "/#org"}, "copyrightHolder": {"@id": SITE + "/#org"}, "copyrightYear": 2026, "inLanguage": "en-IN"}], None, "1.0")
 
 # ---------------------------------------------------------------- crops
 start("/crops")
@@ -465,6 +471,7 @@ about += sec(f'''<div class="prose"><p>{SHORT} is an organic fertilizer and bio 
 <h2>What we believe</h2><p>We want to make farming free of hazardous chemicals and make sustainable food growing easier for the generations to come.</p>
 <h2>Founder</h2><p>Gafar Laiya founded {SHORT} and leads its product development and farmer programmes. He writes many of the guides on this site.</p>
 <h2>Company details</h2><p>{NAME}<br>Factory: {FACTORY}<br>Registered office: {REGOFF}<br>CIN {CIN}</p>
+<h2 id="this-website">About this website</h2><p>{OWNER_LINE} The content is written by Gafar Laiya, founder, and the Gujarat Bio Organics team from our field work with farmers since 2006. Crop guides give general guidance; farmer experiences are their own reports. If you see a mistake, write to <a href="mailto:{MAIL}">{MAIL}</a> and we will correct it. See also <a href="/our-websites">our other websites</a>, <a href="/terms">terms</a> and <a href="/privacy-policy">privacy policy</a>.</p>
 <h2>More about us</h2>{"".join(f'<p><a href="{u}">{t}</a>: {d}</p>' for u, t, d in [("/quality", "Quality and approvals", "NOCs for 36 biostimulant grades and 11 biofertilizer types, and how we check every batch."), ("/factory-and-rd", "Factory and R&amp;D", "how and where our products are made."), ("/bulk-buyers", "Bulk buyers", "supply for FPOs, plantations and farm companies."), ("/contact", "Contact", "phone, WhatsApp, email and addresses.")])}</div>''')
 about += sec('<div class="grid">' + media("about-founder-portrait.webp", "Portrait of Gafar Laiya, founder, in the field or at the factory") + media("about-team-group.webp", "Group photo of the Gujarat Bio Organics team at the factory")
              + media("about-company-video.mp4", "Two-minute company video: our story, factory and farmers", "video") + '</div><div class="btns"><a class="btn btn-leaf" href="/our-story">Our story since 2006</a><a class="btn btn-line" href="/our-impact">Our impact</a></div>', "Meet us", tint=True)
@@ -590,7 +597,7 @@ start("/contact")
 contact = hero("Contact us", "Questions about your crop, dealership or an order? We reply on WhatsApp and by phone.", [("Contact", None)], light=True)
 contact += sec(f'''<div class="grid two"><div><h2>Farmers, dealers and orders</h2><p>WhatsApp or call: <a href="tel:{TEL}">{PHONE}</a><br>Email: <a href="mailto:{MAIL}">{MAIL}</a></p><div class="btns">{btn_enq()}{btn_wa("Hello Gujarat Bio Organics, I have a question.")}{btn_call()}</div>
 <h2>Bulk, OEM and export</h2><p><a href="{B2B}/contact">Business site contact page</a>.</p></div>
-<div><h2>Visit us</h2><p><b>Factory</b><br>{FACTORY}</p><p><b>Registered office</b><br>{REGOFF}</p><p>{NAME}<br>CIN {CIN}</p></div></div>''')
+<div><h2>Visit us</h2><p class="note">{OWNER_LINE}</p><p><b>Factory</b><br>{FACTORY}</p><p><b>Registered office</b><br>{REGOFF}</p><p>{NAME}<br>CIN {CIN}</p></div></div>''')
 render("/contact", "Contact Gujarat Bio Organics | WhatsApp, Phone, Address", "Contact Gujarat Bio Organics on WhatsApp or phone (+91 99787 91167), email sales@gujaratbio.com, or visit our factory in Shihor, Bhavnagar, Gujarat.",
        contact, None, [("Contact", None)], "0.7")
 
@@ -602,7 +609,7 @@ legal("/shipping-and-returns", "Shipping and Returns | Gujarat Bio Organics", "S
 <h2>Damaged or wrong items</h2><p>If your order arrives damaged, leaking or wrong, send photos of the pack and parcel on WhatsApp ({PHONE}) or to {MAIL} within 48 hours of delivery. We will replace the item or refund it after checking.</p>
 <h2>Cancellations</h2><p>You can cancel an order before dispatch by contacting us. Once dispatched, an order cannot be cancelled.</p>
 <h2>Refunds</h2><p>Approved refunds are paid to the original payment method within 7 working days.</p><h2>Contact</h2><p>{NAME}, {REGOFF}. {PHONE}, {MAIL}.</p>''')
-legal("/terms", "Terms of Use and Sale | Gujarat Bio Organics", "Terms of use and sale", f'''<p>These terms apply to this website and to orders placed with {NAME} ("we").</p>
+legal("/terms", "Terms of Use and Sale | Gujarat Bio Organics", "Terms of use and sale", f'''<p>These terms apply to this website and to orders placed with {NAME} ("we").</p><h2>Website owner</h2><p>{OWNER_LINE} Registered office: {REGOFF}. Factory: {FACTORY}.</p>
 <h2>Products and advice</h2><p>Product information and crop guides on this site are general guidance. Results depend on soil, weather, crop and management and are not guaranteed. Always follow the label.</p>
 <h2>Orders and prices</h2><p>Prices are shared on enquiry, are in Indian rupees and may change. Taxes and delivery charges are confirmed before payment.</p>
 <h2>Shipping, cancellation and refunds</h2><p>See <a href="/shipping-and-returns">shipping and returns</a>.</p>
@@ -611,6 +618,13 @@ legal("/privacy-policy", "Privacy Policy | Gujarat Bio Organics", "Privacy polic
 <h2>What we collect</h2><ul><li>What you send us on WhatsApp, phone, email or forms: name, phone, location, crop, photos and order details.</li><li>Order and delivery details needed to deliver your order.</li><li>If you allow it, Google Analytics records how the site is used (pages viewed, device, approximate location).</li></ul>
 <h2>Why</h2><p>To answer your questions, deliver orders, send crop advice you ask for, and improve the site. We do not sell your details.</p>
 <h2>Your choices</h2><p>You can ask us to show, correct or delete your details, or to stop messaging you: write to {MAIL} or message us on WhatsApp. We aim to follow India's Digital Personal Data Protection Act, 2023.</p><h2>Contact</h2><p>{NAME}, {REGOFF}.</p>''')
+
+start("/our-websites")
+ow = hero("Our websites", f"All websites owned and maintained by {NAME.replace('Pvt. Ltd.', 'Private Limited')}.", [("Our websites", None)], light=True)
+ow += sec('<div class="grid">' + "".join(f'<article class="card"><h3><a href="{u}" rel="noopener">{esc(n)}</a></h3><p>{esc(d)}</p><a class="more" href="{u}" rel="noopener">Visit</a></article>' for u, n, d in SITES) + "</div>"
+          + f'<p class="prose" style="margin-top:20px">{OWNER_LINE} Registered office: {REGOFF}. If you find a website using our name or the Immunity brand that is not listed here, please tell us at <a href="mailto:{MAIL}">{MAIL}</a>.</p>')
+render("/our-websites", "Our Websites | Gujarat Bio Organics", "All websites owned and maintained by Gujarat Bio Organics Private Limited: main site, business site for bulk and OEM buyers, and ganna.in for sugarcane growers.",
+       ow, [{"@context": "https://schema.org", "@type": "ItemList", "name": "Websites of Gujarat Bio Organics", "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": u, "name": n} for i, (u, n, d) in enumerate(SITES)]}], [("Our websites", None)], "0.3")
 
 # ---------------------------------------------------------------- 404, sitemap, robots, llms.txt, media list, redirects
 start("/404")
@@ -630,6 +644,8 @@ open(os.path.join(ROOT, "llms.txt"), "w", encoding="utf-8").write(f"""# {NAME}
 - Phone / WhatsApp: {PHONE}; email: {MAIL}
 - Approvals: NOCs from the Directorate of Agriculture, Government of Gujarat for 36 Schedule VI biostimulant grades and 11 biofertilizer types.
 - Prices are shared on enquiry.
+- {OWNER_LINE}
+- Related websites of the same company: https://b2b.gujaratbio.com (bulk, OEM, export), https://ganna.in (sugarcane, Gujarati).
 
 ## Immunity products
 """ + "".join(f"- [{p['name']}]({SITE}/products/{p['slug']}): {p['line']}\n" for p in PRODUCTS) + "\n## Crop guides\n" +
