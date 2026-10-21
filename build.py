@@ -6,6 +6,7 @@ import os, json, html as H, re, csv
 from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+import datetime; TODAY = datetime.date.today().isoformat()
 SITE = "https://agriculture.gujaratbio.com"   # change to https://www.gujaratbio.com at launch
 TRIAL = True                                   # True: every page is noindex and a trial notice shows
 OLD_SITE = "https://en.gujaratbio.com"
@@ -164,7 +165,7 @@ ORG = {"@context": "https://schema.org", "@type": "Organization", "@id": SITE + 
        "brand": {"@type": "Brand", "name": "Immunity", "logo": SITE + "/assets/img/brand/immunity-logo.webp"}}
 
 PAGES = []
-def render(path, title, desc, body, schemas=None, crumbs=None, prio="0.6", lang="en"):
+def render(path, title, desc, body, schemas=None, crumbs=None, prio="0.6", lang="en", og=None):
     url = SITE + path
     ld = [ORG] if path == "/" else []
     if crumbs:
@@ -178,7 +179,7 @@ def render(path, title, desc, body, schemas=None, crumbs=None, prio="0.6", lang=
     assert len(title) <= 66, (path, len(title), title)
     out = f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8">{tracking()}<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)}</title><meta name="description" content="{esc(desc)}"><meta name="robots" content="{robots}"><link rel="canonical" href="{url}">
-<meta property="og:type" content="website"><meta property="og:site_name" content="{SHORT}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{url}"><meta property="og:image" content="{SITE}/assets/img/brand/gbo-logo.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="{SHORT}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{url}"><meta property="og:image" content="{SITE}{og or "/assets/img/brand/gbo-logo.png"}"><meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1c4720"><link rel="icon" href="/assets/img/brand/gbo-logo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="{FONT}">
 <style>{CSS}</style>{ldh}</head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id={GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -294,7 +295,8 @@ for c in CROPS:
     title = f"{c['name']} Farming Guide: Stages, Problems & Care | GBO"
     if len(title) > 66: title = f"{c['name']} Guide: Stages, Problems & Care | GBO"
     render(path, title, f"{c['name']} guide for growers: stage-by-stage care, common problems, what to check, and {p['name']}.",
-           body, [faq_ld(c["faq"]), article_ld(path, f"{c['name']} farming guide", c["intro"])], [("Crops", "/crops"), (c["name"], None)], "0.8")
+           body, [faq_ld(c["faq"]), article_ld(path, f"{c['name']} farming guide", c["intro"])], [("Crops", "/crops"), (c["name"], None)], "0.8",
+           og=(f"/assets/media/crop-{c['slug']}-hero.webp" if os.path.exists(os.path.join(ROOT, "assets", "media", f"crop-{c['slug']}-hero.webp")) else f"/assets/img/products/{p['slug']}.webp"))
 
 # ---------------------------------------------------------------- products
 start("/products")
@@ -343,7 +345,8 @@ for p in PRODUCTS:
     if len(t) > 66: t = f"{p['name']} | Gujarat Bio Organics"
     if len(t) > 66: t = f"{p['name']} | Gujarat Bio Organics"
     if len(t) > 66: t = f"{p['name']} | GBO"
-    render(path, t, f"{p['line']} Pack sizes, who it is for and how to send an enquiry.", body, [prod_ld, faq_ld(pfaq)], [("Products", "/products"), (p["name"], None)], "0.8")
+    _og = f"/assets/img/products/{p['slug']}.webp" if os.path.exists(os.path.join(ROOT, "assets", "img", "products", p["slug"] + ".webp")) else None
+    render(path, t, f"{p['line']} Pack sizes, who it is for and how to send an enquiry.", body, [prod_ld, faq_ld(pfaq)], [("Products", "/products"), (p["name"], None)], "0.8", og=_og)
 
 # ---------------------------------------------------------------- farmer stories
 start("/farmer-stories")
@@ -635,8 +638,9 @@ for old in ("how-to-buy",):  # remove pages from the first build
     if os.path.isdir(d): import shutil; shutil.rmtree(d)
 
 open(os.path.join(ROOT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    "".join(f"<url><loc>{SITE}{p}</loc><priority>{pr}</priority></url>\n" for p, pr in PAGES) + "</urlset>\n")
-open(os.path.join(ROOT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
+    "".join(f"<url><loc>{SITE}{p}</loc><lastmod>{TODAY}</lastmod><priority>{pr}</priority></url>\n" for p, pr in PAGES) + "</urlset>\n")
+BOTS = ["Googlebot", "Bingbot", "Google-Extended", "GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Perplexity-User", "Applebot-Extended", "CCBot"]
+open(os.path.join(ROOT, "robots.txt"), "w").write("".join(f"User-agent: {b}\nAllow: /\n\n" for b in BOTS) + f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
 open(os.path.join(ROOT, "llms.txt"), "w", encoding="utf-8").write(f"""# {NAME}
 > Farmer website of {NAME}, Bhavnagar, Gujarat, India. Working with farmers since 2006. Makes biostimulants (main line), biofertilizers and organic fertilizers; sells the Immunity range (Specials for 20 crops, formulas for all crops, 11 biofertilizers, soil granules). Business buyers: {B2B}
 
