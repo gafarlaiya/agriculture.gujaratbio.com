@@ -134,9 +134,11 @@ def tracking():
           "var eu=/^(Europe\\/|Atlantic\\/(Canary|Madeira|Azores|Faroe|Reykjavik))/.test(tz);var v=eu?'denied':'granted';"
           "gtag('consent','default',{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v});"
           "dataLayer.push({site_section:'farmer_site'});"
-          "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});"
+          "function g(){if(window.__gtm)return;window.__gtm=1;(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});"
           "var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;f.parentNode.insertBefore(j,f)})"
-          f"(window,document,'script','dataLayer','{GTM_ID}')}})();")
+          f"(window,document,'script','dataLayer','{GTM_ID}')}}"
+          "if(document.readyState==='complete')setTimeout(g,1);else addEventListener('load',function(){setTimeout(g,1)});"
+          "['pointerdown','keydown','scroll'].forEach(function(e){addEventListener(e,g,{once:true,passive:true})})})();")
     return "<script>" + js + "</script>"
 
 FONT = "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Mukta:wght@400;600;700&display=swap"
