@@ -42,12 +42,16 @@ function send(res, code, file, extra, req) {
     res.writeHead(code, h); res.end(buf);
   });
 }
+let HOST = {};  // live build only: {"canonical": "...", "redirect_hosts": [...]}
+try { HOST = JSON.parse(fs.readFileSync(path.join(__dirname, 'host.json'), 'utf8')); } catch (e) {}
 http.createServer((req, res) => {
+  const host = (req.headers.host || '').toLowerCase().split(':')[0];
+  if (HOST.canonical && (HOST.redirect_hosts || []).includes(host)) { res.writeHead(301, {Location: 'https://' + HOST.canonical + req.url}); return res.end(); }
   let p; try { p = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch (e) { res.writeHead(400); return res.end('Bad request'); }
   if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
   const to = redirectFor(p); if (to && to !== p) { res.writeHead(301, {Location: to}); return res.end(); }
   const full = path.normalize(path.join(ROOT, p));
-  if (!full.startsWith(ROOT) || /(^|\/)\.|server\.js$|package\.json$|\.py$|\.md$|\.gs$|^\/redirects\.json$/.test(p)) return send(res, 404, path.join(ROOT, '404.html'), null, req);
+  if (!full.startsWith(ROOT) || /(^|\/)\.|server\.js$|package\.json$|\.py$|\.md$|\.gs$|^\/(redirects|host|redirects-at-launch|content_articles)\.json$|\.csv$/.test(p)) return send(res, 404, path.join(ROOT, '404.html'), null, req);
   fs.stat(full, (e, st) => {
     if (!e && st.isFile()) return send(res, 200, full, null, req);
     const idx = path.join(full, 'index.html');

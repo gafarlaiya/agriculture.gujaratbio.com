@@ -7,8 +7,9 @@ from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 import datetime; TODAY = datetime.date.today().isoformat()
-SITE = "https://agriculture.gujaratbio.com"   # change to https://www.gujaratbio.com at launch
-TRIAL = True                                   # True: every page is noindex and a trial notice shows
+LAUNCH = os.environ.get("LAUNCH") == "1"       # LAUNCH=1 python3 build.py  -> live build for www.gujaratbio.com
+SITE = "https://www.gujaratbio.com" if LAUNCH else "https://agriculture.gujaratbio.com"
+TRIAL = not LAUNCH                             # trial: every page is noindex and a trial notice shows
 OLD_SITE = "https://en.gujaratbio.com"
 B2B = "https://b2b.gujaratbio.com"
 GTM_ID = "GTM-5JDXGL2S"
@@ -65,7 +66,6 @@ def media(fname, desc, kind="img", cls=""):
     return f'<div class="slot {"video " if kind == "video" else ""}{cls}" role="img" aria-label="{esc(label + ": " + desc)}"><span>{label}</span><span class="fn">{esc(fname)}</span><span class="ds">{esc(desc)}</span></div>'
 
 SITES = [("https://www.gujaratbio.com/", "www.gujaratbio.com", "Main company website: Immunity products, crop guides and farmer knowledge (this site, after the trial)."),
-         ("https://agriculture.gujaratbio.com/", "agriculture.gujaratbio.com", "Trial address of the new main website."),
          ("https://b2b.gujaratbio.com/", "b2b.gujaratbio.com", "Business buyers: bulk supply, private label, OEM and export of biostimulants and biofertilizers."),
          ("https://ganna.in/", "ganna.in", "Sugarcane growers, in Gujarati: Immunity Sugarcane Program, dose schedule and farmer results."),
          ("https://en.gujaratbio.com/", "en.gujaratbio.com", "Our previous website, kept for reference for a limited time.")]
@@ -673,4 +673,11 @@ with open(os.path.join(ROOT, "MEDIA_LIST.csv"), "w", newline="", encoding="utf-8
         w.writerow([fn, "video (MP4)" if kind == "video" else "photo (JPG/WEBP)", desc, SITE + page, "received" if here else "needed"])
 
 exec(open(os.path.join(ROOT, "redirects_map.py"), encoding="utf-8").read())
+# live build: switch on old-URL redirects and send every other host name (gujaratbio.com, agriculture.) to www
+if LAUNCH:
+    import shutil; shutil.copy(os.path.join(ROOT, "redirects-at-launch.json"), os.path.join(ROOT, "redirects.json"))
+    json.dump({"canonical": "www.gujaratbio.com", "redirect_hosts": ["gujaratbio.com", "agriculture.gujaratbio.com"]}, open(os.path.join(ROOT, "host.json"), "w"))
+else:
+    json.dump({}, open(os.path.join(ROOT, "redirects.json"), "w"))
+    if os.path.exists(os.path.join(ROOT, "host.json")): os.remove(os.path.join(ROOT, "host.json"))
 print(f"built {len(PAGES)} pages, {len(seen)} media slots")
