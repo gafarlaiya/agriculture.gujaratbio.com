@@ -56,3 +56,17 @@ DEALER_WANTS = [
  ("Margin", "Dealer prices and margins shared on enquiry."),
  ("Marketing support", "Posters, crop leaflets, farmer videos and field demonstrations in your area."),
 ]
+
+KNOW.append(dict(slug="potato-fertilizer-schedule", title="Potato Fertilizer Schedule: Stage-by-Stage Nutrition | GBO",
+      h1="Potato fertilizer schedule: stage-by-stage nutrition plan",
+      desc="A stage-by-stage potato fertilizer schedule: what to apply before planting, at earthing up, at tuber initiation and during bulking, and when to stop irrigation.",
+      answer="A good potato fertilizer schedule follows the crop: organic manure and the basal dose before planting, the rest of the nitrogen at earthing up, steady water and potash through tuber initiation and bulking, and no irrigation in the last 10 to 15 days. The exact amounts should come from your soil test.",
+      media=[("potato-schedule-field-stages.webp", "Photo of a potato field at earthing up, with ridges and healthy green plants")],
+      sections=[("Before planting", ["Get a soil test; it decides how much nitrogen, phosphorus and potash your field needs.", "Mix well-rotted farmyard manure or compost into the field.", "Apply the full phosphorus and potash and about half of the nitrogen as the basal dose at planting, unless your soil test advice says otherwise.", "Biofertilizers such as Azotobacter and PSB can go in with the manure."]),
+                ("Earthing up (about 25 to 30 days after planting)", ["Apply the remaining nitrogen just before earthing up.", "Earth up well so tubers stay covered and protected.", "Irrigate lightly after earthing up."]),
+                ("Tuber initiation (about 35 to 50 days)", ["This is when the plant decides how many tubers it will carry; avoid any water stress.", "Correct zinc or boron shortage if your soil test shows it.", "Biostimulants and crop formulas such as Immunity Potato Special are used around this stage to support roots."]),
+                ("Bulking (about 50 to 80 days)", ["Tubers grow in size and weight; potash and steady water matter most.", "Protect the leaves from late blight; healthy leaves fill the tubers.", "Avoid late nitrogen; it delays maturity and weakens skins."]),
+                ("Maturity and harvest", ["Stop irrigation about 10 to 15 days before harvest.", "Cut haulms when advised so the skin sets.", "Harvest when skins do not peel when rubbed."])],
+      faq=[("When should urea be applied to potato?", "A common practice is half the nitrogen at planting and the rest at earthing up, about 25 to 30 days after planting. Follow your soil test advice for the amount."),
+           ("When should I stop irrigating potato before harvest?", "About 10 to 15 days before harvest, so the skins set and the tubers store well."),
+           ("Which Immunity product is for potato?", "Immunity Potato Special. Send us your crop stage and location for a schedule.")]))

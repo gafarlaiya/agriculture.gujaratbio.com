@@ -22,6 +22,16 @@ RESULTS = "Results differ from farm to farm with soil, weather, crop and managem
 for _f in ("content_products.py", "content_crops.py", "content_crops2.py", "content_knowledge.py", "content_pages.py"):
     exec(open(os.path.join(ROOT, _f), encoding="utf-8").read())
 
+ARTICLES = json.load(open(os.path.join(ROOT, "content_articles.json"), encoding="utf-8"))
+CROP_KW = {"apple": ["apple", "root rot"], "potato": ["potato"], "banana": ["banana"], "sugarcane": ["sugarcane", "गन्न"], "cotton": ["cotton", "कपास"],
+           "mango": ["mango"], "citrus": ["citrus", "lemon"], "onion": ["onion"], "coconut": ["coconut"], "paddy": ["paddy", "rice "]}
+def art_crop(a):
+    t = (a["h1"] + " " + a["old"]).lower()
+    return next((c for c, ks in CROP_KW.items() if any(k in t for k in ks)), "")
+for _a in ARTICLES: _a["crop"] = art_crop(_a)
+CAT_PAGE = {"soil": ("/knowledge/soil-health", "Soil health"), "compost": ("/guides/compost-and-humic-acid", "Compost and humic acid"),
+            "organic": ("/knowledge/sustainability", "Sustainable farming and the 5 Rs"), "crops": ("/crops", "Crop guides")}
+
 def esc(s): return H.escape(str(s), quote=True)
 def wa(msg): return f"https://wa.me/{WA}?text={quote(msg)}"
 def cap(s): return s[0].upper() + s[1:]
@@ -59,7 +69,7 @@ NAV = [("/", "Home", None),
        ("/products", "Products", [(f"/products#{g}", t) for g, t, _ in GROUPS]),
        ("/farmer-stories", "Farmer Stories", None),
        ("/knowledge", "Knowledge", [("/crop-problems", "Crop problems"), ("/knowledge/soil-health", "Soil health"), ("/knowledge/soil-fertility", "Soil fertility"),
-                                    ("/knowledge/sustainability", "Sustainability and the 5 Rs"), ("/guides", "Farming guides"), ("/articles", "Articles")]),
+                                    ("/knowledge/sustainability", "Sustainability and the 5 Rs"), ("/guides", "Farming guides"), ("/articles", "Articles"), ("/knowledge/potato-fertilizer-schedule", "Potato fertilizer schedule"), ("/tools/fertilizer-dose-calculator", "Fertilizer dose calculator")]),
        ("/about", "About", [("/about", "About us"), ("/our-story", "Our story: since 2006"), ("/our-impact", "Our impact"), ("/quality", "Quality and approvals"), ("/factory-and-rd", "Factory and R&D")]),
        ("/dealers", "Dealers & Bulk", [("/dealers", "Become a dealer"), ("/bulk-buyers", "Bulk buyers"), ("/oem-private-label", "Need OEM or private label?"), ("/where-to-buy", "Where to buy")])]
 
@@ -105,10 +115,24 @@ FONT = "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family
 CSS = re.sub(r"\s*([{};:,>])\s*", r"\1", re.sub(r"/\*.*?\*/", "", open(os.path.join(ROOT, "assets", "site.css"), encoding="utf-8").read(), flags=re.S)).replace(";}", "}")
 JS = ("document.querySelector('.menu-btn')?.addEventListener('click',function(){var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)});"
       "document.addEventListener('click',function(e){var a=e.target.closest('[data-ev]');if(a){window.dataLayer=window.dataLayer||[];dataLayer.push({event:a.dataset.ev,link_url:a.href||'',page_path:location.pathname})}});"
+      "var SB='https://filbmvtclfcrrvxckema.supabase.co',SK='sb_publishable_qbndsVEhemxGLYZa6P3PyQ_iDNmsmmT';"
+      "function st(k,v){try{localStorage.setItem(k,v)}catch(e){}}function ld(k){try{return localStorage.getItem(k)||''}catch(e){return ''}}"
+      "(function(){var q=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','fbclid'].forEach(function(k){if(q.get(k)&&!ld('gbo_'+k))st('gbo_'+k,q.get(k))});"
+      "if(!ld('gbo_ref')&&document.referrer&&document.referrer.indexOf(location.host)<0)st('gbo_ref',document.referrer);if(!ld('gbo_landing'))st('gbo_landing',location.href)})();"
+      "function save(d){var r={name:d.name,company:d.shop,phone:d.phone,country:d.location?(/india/i.test(d.location)?d.location:d.location+', India'):'',interest:d.product||d.crop,grades:d.crop,qty:d['monthly volume'],form:'Farmer site: '+(d.type||'Enquiry'),channel:'whatsapp',"
+      "message:[d.message,d['current brands']?'Current brands: '+d['current brands']:''].filter(Boolean).join(' | '),raw:d,page:location.href,site:location.host,"
+      "utm_source:ld('gbo_utm_source'),utm_medium:ld('gbo_utm_medium'),utm_campaign:ld('gbo_utm_campaign'),utm_content:ld('gbo_utm_content'),utm_term:ld('gbo_utm_term'),"
+      "gclid:ld('gbo_gclid'),fbclid:ld('gbo_fbclid'),referrer:ld('gbo_ref'),landing:ld('gbo_landing')};try{r.timezone=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}"
+      "function post(x){return fetch(SB+'/rest/v1/leads',{method:'POST',keepalive:true,headers:{apikey:SK,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(x)}).catch(function(){return null})}"
+      "return post(r).then(function(x){if(x&&!x.ok&&x.status<500)return post({name:r.name,phone:r.phone,country:r.country,interest:r.interest,form:r.form,channel:r.channel,message:r.message,page:r.page,site:r.site})})}"
       "var F=document.getElementById('enqform');if(F){var q=new URLSearchParams(location.search);['crop','product','type'].forEach(function(k){var v=q.get(k);if(v&&F[k])F[k].value=v});"
-      "F.addEventListener('submit',function(e){e.preventDefault();var d=new FormData(F),m='Hello Gujarat Bio Organics, I am sending an enquiry from your website.';"
-      "d.forEach(function(v,k){if(v)m+='\\n'+k.charAt(0).toUpperCase()+k.slice(1)+': '+v});window.dataLayer=window.dataLayer||[];dataLayer.push({event:'generate_lead',enquiry_type:d.get('type')||''});"
-      f"location.href='https://wa.me/{WA}?text='+encodeURIComponent(m)}})}}")
+      "F.addEventListener('submit',function(e){e.preventDefault();var d={},fd=new FormData(F),m='Hello Gujarat Bio Organics, I am sending an enquiry from your website.';"
+      "fd.forEach(function(v,k){if(v){d[k]=v;m+='\\n'+k.charAt(0).toUpperCase()+k.slice(1)+': '+v}});window.dataLayer=window.dataLayer||[];dataLayer.push({event:'generate_lead',enquiry_type:d.type||''});"
+      "var go=function(){location.href='https://wa.me/919978791167?text='+encodeURIComponent(m)};var t=setTimeout(go,1500);save(d).then(function(){clearTimeout(t);go()},function(){clearTimeout(t);go()})})}"
+      "var C=document.getElementById('calc');if(C){C.addEventListener('input',calc);calc()}"
+      "function calc(){var g=function(i){return Math.max(0,parseFloat(document.getElementById(i).value)||0)},N=g('cn'),P=g('cp'),K=g('ck'),A=g('ca')||1,src=document.getElementById('cs').value,o=[];"
+      "if(src==='dap'){var dap=P/0.46,urea=Math.max(0,N-dap*0.18)/0.46;o=[['DAP (18-46-0)',dap,50],['Urea (46% N)',urea,45]]}else{o=[['SSP (16% P2O5)',P/0.16,50],['Urea (46% N)',N/0.46,45]]}"
+      "o.push(['MOP (60% K2O)',K/0.6,50]);document.getElementById('cout').innerHTML=o.map(function(x){var kg=x[1]*A;return '<tr><td>'+x[0]+'</td><td>'+kg.toFixed(1)+' kg</td><td>'+(kg/x[2]).toFixed(1)+' bags of '+x[2]+' kg</td></tr>'}).join('')}")
 
 ORG = {"@context": "https://schema.org", "@type": "Organization", "@id": SITE + "/#org", "name": NAME, "alternateName": ["Gujarat Bio Organics", "GBO"],
        "url": SITE + "/", "logo": SITE + "/assets/img/brand/gbo-logo.png", "foundingDate": "2006", "email": MAIL, "telephone": TEL, "sameAs": SOCIAL + [B2B + "/"],
@@ -125,6 +149,7 @@ def render(path, title, desc, body, schemas=None, crumbs=None, prio="0.6", lang=
             {"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + (u or path)} for i, (n, u) in enumerate(items)]})
     ld += schemas or []
     ldh = "".join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in ld)
+    if len(desc) > 160: desc = desc[:157].rsplit(" ", 1)[0].rstrip(",;:") + "..."
     robots = "noindex,follow" if TRIAL else "index,follow,max-image-preview:large"
     assert len(title) <= 66, (path, len(title), title)
     out = f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8">{tracking()}<meta name="viewport" content="width=device-width,initial-scale=1">
@@ -186,7 +211,7 @@ home_faq = [("Who is Gujarat Bio Organics?", f"{NAME} makes biostimulants, biofe
             ("How do I buy Immunity?", "Send an enquiry on this site, WhatsApp or call us. We tell you which product suits your crop and where to buy it near you."),
             ("Can you tell me what to use on my crop?", "Yes. Send a photo, your location and the problem. Our team replies with what to check and a programme for your field.")]
 specials = [p for p in PRODUCTS if p["group"] == "specials"]
-home = hero("What do you grow?", f"Pick your crop. See its stages, the problems farmers face, what has worked for them and the Immunity formula made for it. From {SHORT}, working with farmers since 2006.")
+home = hero("What do you grow?", f"Pick your crop. See its stages, the problems farmers face, what has worked for them and the Immunity formula made for it. From {SHORT}, a bio fertilizer, biostimulant and organic fertilizer manufacturer in Bhavnagar, Gujarat, working with farmers since 2006.")
 home = home.replace("</p></div></section>", f"</p>{picker()}</div></section>", 1)
 home += sec(f'<div class="hero-grid"><div class="prose"><p>{SHORT} started in 2006 in Bhavnagar, Gujarat. For nearly 20 years we have worked on real farms: sugarcane in South Gujarat, potato in Punjab and Haryana, apple in Himachal Pradesh and Jammu and Kashmir, banana in Central Gujarat and mango across India.</p>'
             f'<p>Every Immunity formula came from a problem farmers brought to us. We make them at our own factory in Shihor, with biostimulants as our main line.</p><div class="btns"><a class="btn btn-leaf" href="/our-story">Read our story</a>{btn_enq()}</div></div>'
@@ -204,8 +229,8 @@ home += sec('<div class="grid">' + "".join(card(f"/knowledge/{k['slug']}", k["h1
 home += sec(f'<div class="grid two"><div class="prose"><p>Shop owners and distributors: Immunity covers 20 crops with farmer-tested formulas, approvals and support. Dealer prices and margins on enquiry.</p><div class="btns"><a class="btn btn-leaf" href="/dealers">Become a dealer</a><a class="btn btn-line" href="/where-to-buy">Where to buy</a></div></div>'
             f'<div>{media("home-dealer-shop-display.webp", "Agri input shop counter with Immunity bottles on display and the shop owner")}</div></div>', "Dealers wanted")
 home += sec(faq_html(home_faq), "Questions farmers ask", tint=True)
-render("/", "Gujarat Bio Organics: Immunity Crop Formulas Since 2006",
-       "Immunity crop formulas for sugarcane, potato, mango, apple and 16 more crops, biofertilizers and crop guides from Gujarat Bio Organics, Bhavnagar. Working with farmers since 2006.",
+render("/", "Gujarat Bio Organics | Bio & Organic Fertilizer Manufacturer",
+       "Bio and organic fertilizer manufacturer in Bhavnagar, Gujarat since 2006. Immunity crop formulas for 20 crops, biostimulants and biofertilizers. Send an enquiry.",
        home, [faq_ld(home_faq), {"@context": "https://schema.org", "@type": "WebSite", "url": SITE + "/", "name": SHORT, "publisher": {"@id": SITE + "/#org"}}], None, "1.0")
 
 # ---------------------------------------------------------------- crops
@@ -236,7 +261,11 @@ for c in CROPS:
     body += sec('<div class="grid">' + media(f"crop-{c['slug']}-farmer-video-1.mp4", f"{c['name']} farmer talking in his field about his crop and what changed", "video")
                 + media(f"crop-{c['slug']}-farmer-video-2.mp4", f"Second {c['name'].lower()} farmer story, filmed in the field", "video")
                 + media(f"crop-{c['slug']}-field-visit.mp4", f"Our team on a field visit to a {c['name'].lower()} farm, checking roots and crop", "video") + "</div>", f"{c['name']} farmers in their own words", tint=True)
-    body += sec(faq_html(c["faq"]), f"{c['name']} questions") + enquiry_box(c["name"], p["name"])
+    carts = [a for a in ARTICLES if a["crop"] == c["slug"]]
+    if c["slug"] == "potato": body += sec('<p class="prose">See the <a href="/knowledge/potato-fertilizer-schedule">potato fertilizer schedule</a>: what to apply at each stage.</p>')
+    if carts:
+        body += sec('<div class="grid">' + "".join(card(f"/articles/{a['slug']}", a["h1"], (a["desc"] or "")[:140], "Hindi article" if a["lang"] == "hi" else "Article") for a in carts) + "</div>", f"Articles on {c['name'].lower()}")
+    body += sec(faq_html(c["faq"]), f"{c['name']} questions", tint=not carts) + enquiry_box(c["name"], p["name"])
     title = f"{c['name']} Farming Guide: Stages, Problems & Care | GBO"
     if len(title) > 66: title = f"{c['name']} Guide: Stages, Problems & Care | GBO"
     render(path, title, f"{c['name']} guide for growers: stage-by-stage care, common problems, what to check, and {p['name']}.",
@@ -282,8 +311,10 @@ for p in PRODUCTS:
     prod_ld = {"@context": "https://schema.org", "@type": "Product", "name": p["name"], "description": p["line"], "brand": {"@type": "Brand", "name": "Immunity"},
                "manufacturer": {"@id": SITE + "/#org"}, "category": GNAME[p["group"]]}
     if os.path.exists(os.path.join(ROOT, "assets", "img", "products", p["slug"] + ".webp")): prod_ld["image"] = f"{SITE}/assets/img/products/{p['slug']}.webp"
-    t = f"{p['name']}: Uses, Packs & Enquiry | Gujarat Bio Organics"
-    if len(t) > 66: t = f"{p['name']}: Uses, Packs & Enquiry | GBO"
+    kind = "Biofertilizer" if p["group"] == "bio" else "Organic Fertilizer"
+    t = f"{p['name']} {kind} | Gujarat Bio Organics"
+    if len(t) > 66: t = f"{p['name']} {kind} | GBO"
+    if len(t) > 66: t = f"{p['name']} | Gujarat Bio Organics"
     if len(t) > 66: t = f"{p['name']} | Gujarat Bio Organics"
     if len(t) > 66: t = f"{p['name']} | GBO"
     render(path, t, f"{p['line']} Pack sizes, who it is for and how to send an enquiry.", body, [prod_ld, faq_ld(pfaq)], [("Products", "/products"), (p["name"], None)], "0.8")
@@ -307,6 +338,7 @@ render("/farmer-stories", "Farmer Stories and Videos | Gujarat Bio Organics", "S
 start("/knowledge")
 kn = hero("Agriculture knowledge", "Plain answers on soil, crops and sustainable farming, from nearly 20 years in the field.", [("Knowledge", None)])
 kn += sec('<div class="grid">' + "".join(card(f"/knowledge/{k['slug']}", k["h1"].split(":")[0], k["desc"], "Pillar guide") for k in KNOW) + "</div>", "Soil and sustainability")
+kn += sec('<div class="grid two">' + card("/tools/fertilizer-dose-calculator", "Fertilizer dose calculator", "Turn your soil test N, P and K into bags of urea, DAP or SSP and MOP.", "Tool", "Open calculator") + card("/knowledge/potato-fertilizer-schedule", "Potato fertilizer schedule", "What to apply at each stage of the potato crop.", "Schedule") + "</div>", "Tools and schedules", tint=True)
 kn += sec('<div class="grid">' + "".join(card(f"/crop-problems/{x['slug']}", cap(x["h1"]), x["desc"], CBY[x["crop"]]["name"]) for x in PROBLEMS) + "</div>", "Crop problems", tint=True)
 kn += sec('<div class="grid">' + "".join(card(f"/guides/{g['slug']}", g["h1"], g["desc"], "Guide") for g in GUIDES) + '</div><div class="btns"><a class="btn btn-leaf" href="/articles">All articles</a></div>', "Farming guides")
 render("/knowledge", "Agriculture Knowledge: Soil, Crops, Sustainability | GBO", "Guides on soil health, soil fertility, sustainable farming and the 5 Rs, crop problems and practical farming topics from Gujarat Bio Organics.",
@@ -322,11 +354,15 @@ def article_page(path, basename, baseurl, x, crop=None, hero_media=None):
         c = CBY[crop]; p = PBY[c["product"]]
         inner += f'<p>See the full <a href="/crops/{crop}">{c["name"].lower()} guide</a> and <a href="/products/{p["slug"]}">{p["name"]}</a>.</p>'
     inner += f'<p class="note">Written by Gafar Laiya, founder of {SHORT}, working with farmers since 2006. {RESULTS}</p>'
-    body += sec(f'<div class="prose">{inner}</div>') + sec(faq_html(x["faq"]), "Questions", tint=True) + enquiry_box(CBY[crop]["name"] if crop else "")
+    body += sec(f'<div class="prose">{inner}</div>') + sec(faq_html(x["faq"]), "Questions", tint=True) + x.get("extra", "") + enquiry_box(CBY[crop]["name"] if crop else "")
     render(path, x["title"] if len(x["title"]) <= 66 else x["title"][:66], x["desc"], body, [faq_ld(x["faq"]), article_ld(path, x["h1"], x["desc"])],
            [(basename, baseurl), (x["h1"].split(":")[0][:40], None)], "0.7")
 
-for k in KNOW: article_page(f"/knowledge/{k['slug']}", "Knowledge", "/knowledge", k, hero_media=k["media"])
+KCAT = {"soil-health": "soil", "soil-fertility": "soil", "sustainability": "organic", "potato-fertilizer-schedule": ""}
+for k in KNOW:
+    rel = [a for a in ARTICLES if a["cat"] == KCAT.get(k["slug"])][:6] if KCAT.get(k["slug"]) else [a for a in ARTICLES if a["crop"] == "potato"]
+    k["extra"] = sec('<div class="grid">' + "".join(card(f"/articles/{a['slug']}", a["h1"], (a["desc"] or "")[:140], "Article") for a in rel) + "</div>", "Related articles") if rel else ""
+    article_page(f"/knowledge/{k['slug']}", "Knowledge", "/knowledge", k, hero_media=k["media"])
 start("/crop-problems")
 render("/crop-problems", "Crop Problems: Causes, Signs and What to Do | GBO",
        "Plain guides to common crop problems: apple root rot, mango fruit drop and alternate bearing, sugarcane poor germination, small potatoes and citrus dieback.",
@@ -341,8 +377,26 @@ render("/guides", "Farming Guides: Biostimulants, Compost, Soil Tests | GBO",
        + sec('<div class="grid">' + "".join(card(f"/guides/{g['slug']}", g["h1"], g["desc"], "Guide") for g in GUIDES) + "</div>") + enquiry_box(), None, [("Knowledge", "/knowledge"), ("Guides", None)], "0.7")
 for g in GUIDES: article_page(f"/guides/{g['slug']}", "Guides", "/guides", g)
 
+# ---------------------------------------------------------------- tools: fertilizer dose calculator
+start("/tools/fertilizer-dose-calculator")
+cf = f"""<form class="form" id="calc" onsubmit="return false">
+<div><label for="cn">Nitrogen (N) needed, kg per acre</label><input id="cn" type="number" min="0" step="any" value="50" inputmode="decimal"></div>
+<div><label for="cp">Phosphorus (P2O5) needed, kg per acre</label><input id="cp" type="number" min="0" step="any" value="25" inputmode="decimal"></div>
+<div><label for="ck">Potash (K2O) needed, kg per acre</label><input id="ck" type="number" min="0" step="any" value="25" inputmode="decimal"></div>
+<div><label for="ca">Area in acres</label><input id="ca" type="number" min="0" step="any" value="1" inputmode="decimal"></div>
+<div><label for="cs">Phosphorus source</label><select id="cs"><option value="dap">DAP</option><option value="ssp">SSP</option></select></div></form>
+<table class="packs" style="max-width:620px;margin-top:18px"><thead><tr><th>Fertilizer</th><th>Total</th><th>Bags</th></tr></thead><tbody id="cout"></tbody></table>
+<p class="note">Fertilizer bags: urea 45 kg, DAP, SSP and MOP 50 kg. Nutrient contents used: urea 46% N; DAP 18% N and 46% P2O5; SSP 16% P2O5; MOP 60% K2O.</p>"""
+ct = hero("Fertilizer dose calculator", "Turn your soil test recommendation (kg of N, P and K per acre) into kilos and bags of urea, DAP or SSP, and MOP.", [("Knowledge", "/knowledge"), ("Fertilizer dose calculator", None)], light=True)
+ct += sec(f'<div class="grid two"><div>{cf}</div><div class="prose"><h3>How to use it</h3><ol><li>Take the N, P2O5 and K2O recommendation from your soil test report or soil health card.</li><li>Enter the amounts per acre and your area.</li><li>Choose DAP or SSP for phosphorus. With DAP, the nitrogen it supplies is subtracted from the urea.</li></ol>'
+          f'<p>This calculator only converts nutrients into fertilizer weights. It does not decide how much your crop needs; that comes from a soil test and your crop stage. <a href="/guides/how-to-take-a-soil-sample">How to take a soil sample</a>.</p></div></div>')
+ct += enquiry_box(title="Want a programme for your crop?")
+render("/tools/fertilizer-dose-calculator", "Fertilizer Dose Calculator: Urea, DAP, SSP, MOP Bags | GBO",
+       "Free fertilizer dose calculator: convert your soil test N, P and K per acre into kilos and bags of urea, DAP or SSP, and MOP for your area.",
+       ct, [{"@context": "https://schema.org", "@type": "WebApplication", "name": "Fertilizer dose calculator", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}}],
+       [("Knowledge", "/knowledge"), ("Fertilizer dose calculator", None)], "0.6")
+
 # ---------------------------------------------------------------- articles (moved from the old website)
-ARTICLES = json.load(open(os.path.join(ROOT, "content_articles.json"), encoding="utf-8"))
 ACAT = [("soil", "Soil health"), ("compost", "Compost"), ("crops", "Crop guides"), ("organic", "Organic and sustainable farming")]
 def md_html(t):
     out, ul_open = [], False
@@ -368,8 +422,13 @@ render("/articles", "Farming Articles: Soil, Compost, Crops, Organic | GBO", "Ar
 for a in ARTICLES:
     path = f"/articles/{a['slug']}"; start(path)
     rel = [x for x in ARTICLES if x["cat"] == a["cat"] and x["slug"] != a["slug"]][:3]
+    if a["crop"] and a["crop"] in CBY:
+        _c = CBY[a["crop"]]; _p = PBY[_c["product"]]
+        see = f'<p class="answer">See also: <a href="/crops/{_c["slug"]}">{_c["name"]} guide</a> and <a href="/products/{_p["slug"]}">{esc(_p["name"])}</a>.</p>'
+    else:
+        _u, _t = CAT_PAGE[a["cat"]]; see = f'<p class="answer">See also: <a href="{_u}">{_t}</a> and <a href="/products">the Immunity range</a>.</p>'
     body = hero(a["h1"], a["desc"] or "", [("Articles", "/articles"), (a["h1"][:40], None)], light=True)
-    body += sec(f'<div class="prose">{md_html(a["body"])}<p class="note">By Gafar Laiya, founder of {SHORT}, working with farmers since 2006. {RESULTS}</p></div>')
+    body += sec(f'<div class="prose">{see}{md_html(a["body"])}<p class="note">By Gafar Laiya, founder of {SHORT}, working with farmers since 2006. {RESULTS}</p></div>')
     body += sec('<div class="grid">' + "".join(card(f"/articles/{x['slug']}", x["h1"], (x["desc"] or "")[:140], "Read next") for x in rel) + "</div>", "Read next", tint=True) + enquiry_box()
     t = a["title"] if len(a["title"]) <= 66 else a["title"][:63].rsplit(" ", 1)[0] + "..."
     render(path, t, (a["desc"] or a["h1"])[:160], body, [article_ld(path, a["h1"], a["desc"] or a["h1"])], [("Articles", "/articles"), (a["h1"][:40], None)], "0.6", a["lang"])
@@ -378,16 +437,17 @@ for a in ARTICLES:
 start("/about")
 about = hero("About Gujarat Bio Organics", "Working with farmers since 2006. Biostimulants, biofertilizers and organic fertilizers, made in Bhavnagar, Gujarat.", [("About", None)],
              side=media("about-factory-front.webp", "Front of our factory in Shihor, Bhavnagar with the company name board"))
-about += sec(f'''<div class="prose"><p>{SHORT} started in 2006 in Bhavnagar, Gujarat. From the beginning the work has been on real farms: walking fields with growers, finding out why a crop was failing, and building formulas that solve those problems.</p>
+about += sec(f'''<div class="prose"><p>{SHORT} is an organic fertilizer and bio fertilizer manufacturer in Gujarat, and one of the fertilizer manufacturing companies of Bhavnagar district, with its own factory in Shihor.</p><p>{SHORT} started in 2006 in Bhavnagar, Gujarat. From the beginning the work has been on real farms: walking fields with growers, finding out why a crop was failing, and building formulas that solve those problems.</p>
 <p>That work led to the Immunity range: Specials for 20 crops, formulas for all crops, 11 biofertilizers and soil granules.</p>
 <h2>What we make</h2>{ul(["Biostimulants, our main line: humic and fulvic acid, seaweed extracts, amino acids and protein hydrolysates", "Biofertilizers: nitrogen fixers, phosphate, potash and zinc solubilisers, mycorrhiza and consortia", "Organic fertilizers and the Immunity crop formulas"])}
 <h2>How we make it</h2><p>Everything is made at our own factory in Shihor, Bhavnagar. Nearly 20 years of field work have taught us which raw materials work. We extract them in-house without harsh chemicals, very high pH or heat, because the helpful substances in humus and seaweed are fragile.</p>
 <h2>What we believe</h2><p>We want to make farming free of hazardous chemicals and make sustainable food growing easier for the generations to come.</p>
 <h2>Founder</h2><p>Gafar Laiya founded {SHORT} and leads its product development and farmer programmes. He writes many of the guides on this site.</p>
-<h2>Company details</h2><p>{NAME}<br>Factory: {FACTORY}<br>Registered office: {REGOFF}<br>CIN {CIN}</p></div>''')
+<h2>Company details</h2><p>{NAME}<br>Factory: {FACTORY}<br>Registered office: {REGOFF}<br>CIN {CIN}</p>
+<h2>More about us</h2>{"".join(f'<p><a href="{u}">{t}</a>: {d}</p>' for u, t, d in [("/quality", "Quality and approvals", "NOCs for 36 biostimulant grades and 11 biofertilizer types, and how we check every batch."), ("/factory-and-rd", "Factory and R&amp;D", "how and where our products are made."), ("/bulk-buyers", "Bulk buyers", "supply for FPOs, plantations and farm companies."), ("/contact", "Contact", "phone, WhatsApp, email and addresses.")])}</div>''')
 about += sec('<div class="grid">' + media("about-founder-portrait.webp", "Portrait of Gafar Laiya, founder, in the field or at the factory") + media("about-team-group.webp", "Group photo of the Gujarat Bio Organics team at the factory")
              + media("about-company-video.mp4", "Two-minute company video: our story, factory and farmers", "video") + '</div><div class="btns"><a class="btn btn-leaf" href="/our-story">Our story since 2006</a><a class="btn btn-line" href="/our-impact">Our impact</a></div>', "Meet us", tint=True)
-render("/about", "About Gujarat Bio Organics: Since 2006, Bhavnagar", "Gujarat Bio Organics has worked with farmers since 2006 and makes biostimulants, biofertilizers and organic fertilizers at its own factory in Shihor, Bhavnagar, Gujarat.",
+render("/about", "About Gujarat Bio Organics: Fertilizer Company in Gujarat", "Gujarat Bio Organics has worked with farmers since 2006 and makes biostimulants, biofertilizers and organic fertilizers at its own factory in Shihor, Bhavnagar, Gujarat.",
        about, [ORG], [("About", None)], "0.8")
 
 start("/our-story")
@@ -450,7 +510,8 @@ dform = f'''<form class="form" id="enqform"><input type="hidden" name="type" val
 <div><label for="d5">Brands you sell now</label><input id="d5" name="current brands"></div>
 <div><label for="d6">Expected monthly purchase</label><select id="d6" name="monthly volume"><option value="">Choose</option><option>Up to 50 litres</option><option>50 to 200 litres</option><option>200 to 1000 litres</option><option>More than 1000 litres</option></select></div>
 <div><button class="btn btn-wa" type="submit">{WA_SVG}Send dealer enquiry on WhatsApp</button></div></form>'''
-dl += sec(dform + '<p class="note">Your details open in WhatsApp so you can check them before sending.</p>', "Apply to become a dealer")
+dl += sec(dform + '<p class="note">Your details are saved for our team and open in WhatsApp so you can check them before sending. See our <a href="/privacy-policy">privacy policy</a>.</p>', "Apply to become a dealer")
+dl += sec('<p class="prose">Buying for an FPO, plantation or farm company instead? See <a href="/bulk-buyers">bulk buyers</a>.</p>')
 dl += sec(faq_html([("What margin do dealers get?", "Dealer prices and margins are shared on enquiry and depend on volume and area."),
                     ("Is there a minimum order?", "Tell us your expected monthly purchase and we will suggest a starting order."),
                     ("Do you support dealers with marketing?", "Ask us about posters, crop leaflets, farmer videos and field demonstrations for your area.")]), "Dealer questions", tint=True)
@@ -498,7 +559,7 @@ eform = f'''<form class="form" id="enqform">
 <div><label for="e6">Problem or question</label><textarea id="e6" name="message" rows="4" placeholder="What do you see in the field? Crop age, area in acres..."></textarea></div>
 <div><button class="btn btn-wa" type="submit">{WA_SVG}Send enquiry on WhatsApp</button></div></form>'''
 en = hero("Send an enquiry", "Tell us your crop, the problem and where you are. Our team replies on WhatsApp or calls you back.", [("Enquiry", None)], light=True)
-en += sec(f'<div class="grid two"><div>{eform}<p class="note">Your enquiry opens in WhatsApp so you can check it, add a crop photo and send. Prefer to talk? Call {PHONE}.</p></div>'
+en += sec(f'<div class="grid two"><div>{eform}<p class="note">Your enquiry is saved for our team and opens in WhatsApp so you can check it, add a crop photo and send. Prefer to talk? Call {PHONE}. See our <a href="/privacy-policy">privacy policy</a> and <a href="/terms">terms</a>.</p></div>'
           f'<div class="prose"><h3>What happens next</h3><ol class="stages"><li><h3>We read your enquiry</h3><p>Our team looks at your crop, problem and photo.</p></li><li><h3>We call or reply</h3><p>We tell you what to check and which product suits.</p></li><li><h3>You get a schedule</h3><p>A programme for your crop stage, and where to buy near you.</p></li></ol></div></div>')
 render("/enquiry", "Send an Enquiry | Gujarat Bio Organics", "Send your crop, problem and location to Gujarat Bio Organics. Our team replies on WhatsApp or by phone with advice, product and where to buy.",
        en, None, [("Enquiry", None)], "0.7")

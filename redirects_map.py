@@ -3,7 +3,7 @@
 OLD = {
  "/about": "/about", "/contact": "/contact", "/gallery": "/about", "/downloads": "/products", "/dealer": "/dealers", "/employees": "/about",
  "/products": "/products", "/products-list": "/products", "/product": "/products/immunity-potato-special", "/store": "/products", "/order": "/enquiry", "/order-place": "/enquiry",
- "/quote1": "/enquiry", "/calculator": "/enquiry", "/fertilizer-dosage-calculator": "/enquiry", "/terms-and-conditions": "/terms", "/shipping-policy": "/shipping-and-returns",
+ "/quote1": "/enquiry", "/calculator": "/tools/fertilizer-dose-calculator", "/fertilizer-dosage-calculator": "/tools/fertilizer-dose-calculator", "/terms-and-conditions": "/terms", "/shipping-policy": "/shipping-and-returns",
  "/testimonials": "/farmer-stories", "/testimonials-1": "/farmer-stories", "/services": "/about", "/services1": "/about", "/services2": "/about", "/services3": "/about",
  "/bio-stimulants": "/products", "/bio-stimulants-products": "/products", "/bio-stimulants-wholesale": "/bulk-buyers", "/bio-stimulants-manufacturer-in-india": "/oem-private-label",
  "/agriculture-organic-fertilizers": "/products", "/horticulture-organic-fertilizers": "/products", "/horticulture-crops": "/crops", "/agri-crops": "/crops",
@@ -11,7 +11,7 @@ OLD = {
  "/sugarcane-cultivation-guide": "/crops/sugarcane", "/sugarcane-hindi": "/crops/sugarcane", "/sugarcane-gujarati": "/crops/sugarcane", "/sugarcane-blog-gujarati": "/crops/sugarcane",
  "/best-fertilizer-for-sugarcane-farming": "/crops/sugarcane", "/sugarcane-production-in-india-current-scenario-and-way-ahead": "/crops/sugarcane",
  "/sugarcane-special": "/products/immunity-sugarcane-special", "/immunity-sugarcane-special": "/products/immunity-sugarcane-special",
- "/potato": "/crops/potato", "/potato-copy": "/products/immunity-potato-special", "/potato-hindi-lp": "/crops/potato", "/potato-farming-solution": "/crops/potato", "/potato-cultivation-guide": "/crops/potato",
+ "/potato": "/crops/potato", "/potato-copy": "/products/immunity-potato-special", "/potato-hindi-lp": "/crops/potato", "/potato-farming-solution": "/crops/potato", "/potato-cultivation-guide": "/knowledge/potato-fertilizer-schedule",
  "/best-fertilizer-for-potato-farming": "/crops/potato", "/blog-maximizing-potato-tuber-production": "/crop-problems/potato-small-tubers",
  "/immunity-potato-special-organic-fertilizer-1l": "/products/immunity-potato-special",
  "/mango": "/crops/mango", "/mango-special": "/products/immunity-mango-special", "/mango-fertilizer-schedule": "/crops/mango", "/best-fertilizer-for-mango-farming": "/crops/mango",
