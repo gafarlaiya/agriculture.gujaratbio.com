@@ -262,6 +262,7 @@ for p in PRODUCTS:
     packs = ", ".join(p["packs"]) if p["packs"] else "Pack sizes on enquiry"
     q = "?product=" + quote(p["name"]) + ("&crop=" + quote(c["name"]) if c else "")
     crop_line = f'<p><b>Made for:</b> <a href="/crops/{c["slug"]}">{c["name"]}</a></p>' if c else f'<p><b>Range:</b> {esc(GNAME[p["group"]])}</p>'
+    if p.get("also"): crop_line += f'<p><b>Also used on:</b> {esc(p["also"])}</p>'
     body = hero(p["name"], p["line"], [("Products", "/products"), (p["name"].replace("Immunity ", ""), None)])
     body += sec(f'''<div class="pbox"><div class="pshot">{pimg(p)}</div><div><p><b>Form:</b> {esc(p["form"])}</p>{crop_line}<p><b>Pack sizes:</b> {esc(packs)}</p>
 <p class="note">Prices are not shown online. Send an enquiry and we will share the price and the nearest place to buy.</p>

@@ -88,3 +88,9 @@ PRODUCTS += [
 ]
 PBY = {p["slug"]: p for p in PRODUCTS}
 assert len(PRODUCTS) == 36, len(PRODUCTS)
+
+# Other crops each formula is also used on (from Gujarat Bio Organics' field use)
+ALSO = {"immunity-mango-special": "Chikoo (sapota), guava and similar fruit trees",
+        "immunity-citrus-special": "Lemon, lime, orange, mosambi, malta and kinnow",
+        "immunity-dhanya-special": "Wheat, bajra (pearl millet), jowar (sorghum) and other cereals"}
+for _s, _t in ALSO.items(): PBY[_s]["also"] = _t
