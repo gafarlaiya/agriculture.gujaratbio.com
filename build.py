@@ -162,7 +162,7 @@ def faq_ld(qs): return {"@context": "https://schema.org", "@type": "FAQPage", "m
 def card(href, title, text, meta="", more="Read more"):
     m = f'<div class="meta">{esc(meta)}</div>' if meta else ""
     return f'<article class="card">{m}<h3><a href="{href}">{esc(title)}</a></h3><p>{esc(text)}</p><a class="more" href="{href}">{esc(more)}</a></article>'
-def pcard(p): return f'<a class="pcard" href="/products/{p["slug"]}">{pimg(p)}<span><h3>{esc(p["name"])}</h3><p>{esc(p["line"])}</p></span></a>'
+def pcard(p): return f'<a class="pcard" href="/products/{p["slug"]}">{pimg(p)}<span><h3>{esc(p["name"])}</h3><p>{esc(p["line"])}</p><p class="note" style="margin-top:6px">Price on enquiry &middot; Where to buy</p></span></a>'
 def enquiry_box(crop="", product="", title="Send us your enquiry"):
     q = "?" + "&".join(f"{k}={quote(v)}" for k, v in (("crop", crop), ("product", product)) if v) if (crop or product) else ""
     what = product or (f"my {crop.lower()} crop" if crop else "my crop")
@@ -265,8 +265,8 @@ for p in PRODUCTS:
     if p.get("also"): crop_line += f'<p><b>Also used on:</b> {esc(p["also"])}</p>'
     body = hero(p["name"], p["line"], [("Products", "/products"), (p["name"].replace("Immunity ", ""), None)])
     body += sec(f'''<div class="pbox"><div class="pshot">{pimg(p)}</div><div><p><b>Form:</b> {esc(p["form"])}</p>{crop_line}<p><b>Pack sizes:</b> {esc(packs)}</p>
-<p class="note">Prices are not shown online. Send an enquiry and we will share the price and the nearest place to buy.</p>
-<div class="btns">{btn_enq("Send enquiry", q)}{btn_wa(f"Hello Gujarat Bio Organics, I want to know about {p['name']}. Crop: / Location:", "Ask on WhatsApp")}<a class="btn btn-line" href="/where-to-buy">Where to buy</a></div></div></div>''')
+<p><b>Price:</b> send an enquiry or call us for the price.</p>
+<div class="btns">{btn_enq("Send enquiry for price", q)}{btn_call("Call for price")}{btn_wa(f"Hello Gujarat Bio Organics, please send the price of {p['name']}. Pack size: / Location:", "Ask price on WhatsApp")}<a class="btn btn-line" href="/where-to-buy">Where to buy</a></div></div></div>''')
     left = f'<div><h3>{"Made for" if p["group"] != "bio" else "Suits"}</h3>{ul(p["made_for"])}</div>' if p["made_for"] else ""
     story = f'<div class="prose"><h3>How it was developed</h3><p>{esc(p["story"])}</p></div>' if p["story"] else f'<div class="prose"><h3>Ask us</h3><p>Send your crop, its stage and your location, and our team will tell you how {esc(p["name"])} fits your programme.</p></div>'
     body += sec(f'<div class="grid two">{left}{story}</div>', "Who it is for", tint=True)
