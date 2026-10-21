@@ -1,0 +1,90 @@
+:root{--ink:#23180f;--ink2:#4d4034;--leaf:#2e6b30;--leafd:#1c4720;--tur:#e2a322;--turl:#fbefd2;--field:#f1f5ea;--paper:#fff;--line:#dce3d3;--wa:#1fa855;--r:12px;--max:1120px}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 18px/1.65 "Mukta",system-ui,-apple-system,"Segoe UI",sans-serif}
+img{max-width:100%;height:auto}a{color:var(--leaf)}a:hover{color:var(--leafd)}
+h1,h2,h3{font-family:"Baloo 2","Mukta",system-ui,sans-serif;line-height:1.15;margin:0 0 .5em;color:var(--ink)}
+h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:700}h3{font-size:1.3rem;font-weight:700}
+p{margin:0 0 1em}ul{margin:0 0 1em;padding-left:1.2em}li{margin:.25em 0}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 16px}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:99}
+:focus-visible{outline:3px solid var(--tur);outline-offset:2px}
+/* header */
+.top{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:20}
+.top .wrap{display:flex;align-items:center;gap:16px;min-height:64px}
+.brand{display:flex;flex-direction:column;text-decoration:none;color:var(--ink);line-height:1.1;margin-right:auto}
+.brand b{font-family:"Baloo 2",sans-serif;font-size:1.25rem;font-weight:800;color:var(--leafd)}
+.brand span{font-size:.8rem;color:var(--ink2)}
+.nav{display:flex;gap:4px;flex-wrap:wrap}.nav a{text-decoration:none;color:var(--ink);padding:8px 10px;border-radius:8px;font-weight:600;font-size:.98rem}
+.nav a:hover,.nav a[aria-current]{background:var(--field);color:var(--leafd)}
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font:600 1rem "Mukta",sans-serif;color:var(--ink)}
+@media(max-width:900px){.menu-btn{display:block}.nav{display:none;position:absolute;left:0;right:0;top:64px;background:#fff;border-bottom:1px solid var(--line);flex-direction:column;padding:8px 16px 16px}.nav.open{display:flex}.nav a{padding:12px 8px;font-size:1.1rem}}
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:12px 20px;border-radius:10px;font:700 1.05rem "Mukta",sans-serif;text-decoration:none;border:2px solid transparent;min-height:48px}
+.btn-wa{background:var(--wa);color:#fff}.btn-wa:hover{color:#fff;filter:brightness(.95)}
+.btn-leaf{background:var(--leaf);color:#fff}.btn-leaf:hover{background:var(--leafd);color:#fff}
+.btn-line{border-color:var(--leaf);color:var(--leaf);background:#fff}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.btn svg{width:20px;height:20px;fill:currentColor}
+/* hero */
+.hero{background:var(--leafd);color:#fff;padding:48px 0 56px}
+.hero h1{color:#fff}.hero p.lead{font-size:1.2rem;max-width:44em;color:#e4eedf}
+.crumbs{font-size:.9rem;margin-bottom:12px;color:#cfe0c8}.crumbs a{color:#fff}
+.hero.light{background:var(--field);color:var(--ink)}.hero.light h1{color:var(--ink)}.hero.light p.lead{color:var(--ink2)}.hero.light .crumbs,.hero.light .crumbs a{color:var(--ink2)}
+/* crop picker: the one bold element */
+.picker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}
+.picker a{display:block;background:#fff;color:var(--ink);text-decoration:none;border-radius:var(--r);padding:18px 16px 16px;border-bottom:6px solid var(--tur);min-height:132px}
+.picker a b{display:block;font-family:"Baloo 2",sans-serif;font-size:1.7rem;font-weight:800;line-height:1.1;color:var(--leafd);margin-bottom:6px}
+.picker a span{font-size:.95rem;color:var(--ink2);line-height:1.35;display:block}
+.picker a:hover{border-bottom-color:var(--wa)}
+@media(max-width:820px){.picker{grid-template-columns:repeat(2,1fr)}.picker a b{font-size:1.45rem}}
+/* sections */
+.sec{padding:52px 0}.sec.tint{background:var(--field)}.sec h2+p.sub{color:var(--ink2);margin-top:-.2em;max-width:46em}
+.answer{background:var(--turl);border-left:6px solid var(--tur);padding:16px 18px;border-radius:0 var(--r) var(--r) 0;font-size:1.12rem;margin:0 0 24px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid.two{grid-template-columns:repeat(2,1fr)}
+@media(max-width:820px){.grid,.grid.two{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column}
+.card h3 a{text-decoration:none;color:var(--ink)}.card h3 a:hover{color:var(--leaf)}
+.card .meta{font-size:.9rem;color:var(--ink2);margin-bottom:6px}
+.card .more{margin-top:auto;font-weight:700;text-decoration:none}
+.price{font-family:"Baloo 2",sans-serif;font-size:1.35rem;font-weight:700;color:var(--leafd)}
+.price s{color:var(--ink2);font-size:1rem;font-weight:400;margin-left:6px}
+.prose{max-width:46em}
+/* stages */
+.stages{list-style:none;padding:0;margin:0;counter-reset:s}
+.stages li{counter-increment:s;position:relative;padding:0 0 22px 56px;margin:0}
+.stages li:before{content:counter(s);position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;background:var(--leaf);color:#fff;font:800 1.2rem/40px "Baloo 2",sans-serif;text-align:center}
+.stages li:not(:last-child):after{content:"";position:absolute;left:19px;top:44px;bottom:4px;width:2px;background:var(--line)}
+.stages h3{margin:4px 0 2px}.stages .when{font-size:.92rem;color:var(--ink2);margin-bottom:4px}
+/* checklist */
+.ticks{list-style:none;padding:0}.ticks li{padding-left:30px;position:relative}
+.ticks li:before{content:"";position:absolute;left:4px;top:.55em;width:12px;height:7px;border-left:3px solid var(--leaf);border-bottom:3px solid var(--leaf);transform:rotate(-45deg)}
+/* product box */
+.pbox{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+@media(max-width:820px){.pbox{grid-template-columns:1fr}}
+.slot{background:repeating-linear-gradient(45deg,#f6f8f2,#f6f8f2 10px,#eef2e7 10px,#eef2e7 20px);border:2px dashed #c6d1bb;border-radius:var(--r);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink2);font-weight:600;padding:20px;aspect-ratio:4/3}
+.slot.video{aspect-ratio:16/9;flex-direction:column;gap:8px}
+.slot.video:before{content:"";width:0;height:0;border-left:26px solid #9fb092;border-top:16px solid transparent;border-bottom:16px solid transparent}
+.packs{width:100%;border-collapse:collapse;margin:12px 0 4px}.packs th,.packs td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+.note{font-size:.92rem;color:var(--ink2)}
+/* quotes */
+.quote{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.quote p{font-size:1.1rem;margin-bottom:.6em}.quote cite{font-style:normal;font-weight:700;color:var(--leafd)}.quote .tag{font-size:.85rem;color:var(--ink2);display:block}
+/* faq */
+.faq details{border-bottom:1px solid var(--line);padding:14px 0}.faq summary{cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none;padding-right:28px;position:relative}
+.faq summary::-webkit-details-marker{display:none}.faq summary:after{content:"+";position:absolute;right:4px;top:-2px;font-size:1.5rem;color:var(--leaf)}
+.faq details[open] summary:after{content:"\2212"}.faq details p{margin:10px 0 0}
+/* biz strip */
+.biz{background:var(--ink);color:#f3ece4;padding:36px 0}.biz h2{color:#fff}.biz a.btn{background:var(--tur);color:var(--ink)}
+/* footer */
+.foot{background:#1a120b;color:#d8cfc4;padding:44px 0 96px;font-size:.98rem}.foot a{color:#fff}.foot h2{color:#fff;font-size:1.15rem}
+.foot .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px}.foot ul{list-style:none;padding:0}
+@media(max-width:820px){.foot .cols{grid-template-columns:1fr 1fr}}
+.trial{background:var(--tur);color:var(--ink);text-align:center;font-size:.9rem;padding:6px 16px}
+/* mobile action bar */
+.bar{position:fixed;left:0;right:0;bottom:0;display:none;z-index:30;box-shadow:0 -2px 10px rgba(35,24,15,.15)}
+.bar a{flex:1;text-align:center;padding:14px 8px;font:700 1.05rem "Mukta",sans-serif;text-decoration:none;color:#fff}
+.bar .c{background:var(--leafd)}.bar .w{background:var(--wa)}
+@media(max-width:820px){.bar{display:flex}.foot{padding-bottom:110px}}
+@media(min-width:821px){.foot{padding-bottom:44px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}

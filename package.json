@@ -1,0 +1,9 @@
+{
+  "name": "gujaratbio-farmer-site",
+  "version": "1.0.0",
+  "description": "Gujarat Bio Organics farmer website",
+  "private": true,
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,40 @@
+// Zero-dependency static server: clean URLs, 301 redirects, 404 page, caching.
+const http = require('http'), fs = require('fs'), path = require('path'), zlib = require('zlib');
+const GZ = new Map();  // in-memory gzip cache
+const ROOT = __dirname, PORT = process.env.PORT || 3000;
+const MIME = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.svg':'image/svg+xml','.webp':'image/webp','.png':'image/png','.jpg':'image/jpeg','.xml':'application/xml','.txt':'text/plain; charset=utf-8','.json':'application/json','.ico':'image/x-icon'};
+let REDIRECTS = {};  // old www.gujaratbio.com URLs -> new pages; filled from redirects.json at launch
+try { REDIRECTS = JSON.parse(fs.readFileSync(path.join(__dirname, 'redirects.json'), 'utf8')); } catch (e) {}
+function redirectFor(p) {
+  if (REDIRECTS[p]) return REDIRECTS[p];
+  const lang = p.match(/^\/(gu|hi)(\/.*)?$/);           // old Gujarati/Hindi copies
+  if (lang && Object.keys(REDIRECTS).length) { const rest = lang[2] || '/'; return REDIRECTS[rest] || '/'; }
+  return null;
+}
+function send(res, code, file, extra, req) {
+  fs.readFile(file, (e, buf) => {
+    if (e) { res.writeHead(500); return res.end('Server error'); }
+    const ext = path.extname(file);
+    const h = Object.assign({'Content-Type': MIME[ext] || 'application/octet-stream', 'X-Content-Type-Options': 'nosniff', 'Vary': 'Accept-Encoding'}, extra || {});
+    h['Cache-Control'] = ext === '.html' ? 'public, max-age=300' : (ext === '.css' || ext === '.js') ? 'public, max-age=31536000, immutable' : 'public, max-age=31536000, immutable';
+    const textual = /^(\.html|\.css|\.js|\.svg|\.xml|\.txt|\.json)$/.test(ext);
+    if (textual && req && /\bgzip\b/.test(req.headers['accept-encoding'] || '')) {
+      let z = GZ.get(file);
+      if (!z || z.len !== buf.length) { z = {len: buf.length, data: zlib.gzipSync(buf, {level: 9})}; GZ.set(file, z); }
+      h['Content-Encoding'] = 'gzip'; res.writeHead(code, h); return res.end(z.data);
+    }
+    res.writeHead(code, h); res.end(buf);
+  });
+}
+http.createServer((req, res) => {
+  let p; try { p = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch (e) { res.writeHead(400); return res.end('Bad request'); }
+  if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
+  const to = redirectFor(p); if (to && to !== p) { res.writeHead(301, {Location: to}); return res.end(); }
+  const full = path.normalize(path.join(ROOT, p));
+  if (!full.startsWith(ROOT) || /(^|\/)\.|server\.js$|package\.json$|\.py$|\.md$|\.gs$|^\/redirects\.json$/.test(p)) return send(res, 404, path.join(ROOT, '404.html'), null, req);
+  fs.stat(full, (e, st) => {
+    if (!e && st.isFile()) return send(res, 200, full, null, req);
+    const idx = path.join(full, 'index.html');
+    fs.stat(idx, (e2, st2) => (!e2 && st2.isFile()) ? send(res, 200, idx, null, req) : send(res, 404, path.join(ROOT, '404.html'), null, req));
+  });
+}).listen(PORT, () => console.log('Listening on ' + PORT));
